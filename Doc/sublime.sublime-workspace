@@ -1,0 +1,332 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"channe",
+				"channel_evt"
+			],
+			[
+				"RTM",
+				"RTMidiInputDevice"
+			],
+			[
+				"mes",
+				"messageReceived"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/D/Programming/Projects/SynthMaker/Doc/subl_proj.sublime-project",
+			"settings":
+			{
+				"buffer_size": 191,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 368.0,
+		"last_filter": "af",
+		"selected_items":
+		[
+			[
+				"af",
+				"Project: Add Folder"
+			],
+			[
+				"tm",
+				"View: Toggle Menu"
+			],
+			[
+				"ctt",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"cttt",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"hexv",
+				"HexViewer: Toggle Hex View"
+			],
+			[
+				"pcip",
+				"Package Control: Install Package"
+			],
+			[
+				"ip",
+				"Install Package Control"
+			],
+			[
+				"pcrp",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"colos",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"pclp",
+				"Package Control: List Packages"
+			],
+			[
+				"colorsublime install theme",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"colorit",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"pci",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 452.0
+	},
+	"console":
+	{
+		"height": 130.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Programming/Game Jams/ld41"
+	],
+	"file_history":
+	[
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/RTMidiApi.cs",
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/Helpers.cs",
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/MIDI.cs",
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/MIDIEventFabric.cs",
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/MIDILoader.cs",
+		"/D/Programming/Projects/SynthMaker/Source/SynthMaker.Core/MIDIPlayer.cs",
+		"/D/Programming/Game Jams/ld41/Assets/Standard Assets/Effects/ImageEffects/Readme.txt",
+		"/D/Programming/Game Jams/PostProcessing/package.json",
+		"/D/keys/ip.cfg",
+		"/C/Users/Andrey/Downloads/ip.cfg",
+		"/D/secring.txk",
+		"/D/pubring.txk",
+		"/D/ip.cfg",
+		"/D/tables.cfg",
+		"/D/Programming/Projects/SynthMaker/Assets/SynthMaker/Editor/SynthVirtualKeyboardWindow.cs",
+		"/D/Programming/Projects/SynthMaker/.gitignore",
+		"/D/Programming/Projects/SynthMaker/Assets/SynthMaker/Editor/SynthEditorWindow.cs",
+		"/D/Music/Distrib/Core Library/FXpansion.BFD3.Core.Library.v1.0.0.1.Update.WIN.OSX-R2R/R2R.nfo",
+		"/D/Music/Distrib/Audioease.Altiverb.7.XL.v7.2.6 WIN.READ.NFO-AudioUTOPiA/AudioUTOPiA.nfo",
+		"/D/Music/Distrib/FXpansion.BFD3.v3.2.2.2.WIN.OSX.Incl.Patched.and.Keygen-R2R/R2R.nfo",
+		"/C/Users/Andrey/Downloads/rtmidi-3.0.0.tar/rtmidi-3.0.0/RtMidi.h",
+		"/C/Users/Andrey/Downloads/rtmidi-3.0.0.tar/rtmidi-3.0.0/RtMidi.cpp",
+		"/C/Users/Andrey/Downloads/rtmidi-3.0.0.tar/rtmidi-3.0.0/rtmidi_c.cpp",
+		"/D/Music/Distrib/AmpliTube 4.3.0 NO INSTALL/IK Multimedia - AmpliTube 4 Complete 4.3.0, VST, VST3, AAX, STANDALONE x64 (NO INSTALL, SymLink Installer) [08.09.2017].txt",
+		"/D/Music/Distrib/IK.Multimedia.MODO.BASS.v1.5.0.Incl.Keygen-R2R/R2R.nfo",
+		"/D/Music/VST/FXpansion.BFD3.v3.2.2.2.WIN.OSX.Incl.Patched.and.Keygen-R2R/R2R.nfo",
+		"/D/Programming/Projects/SynthMaker/Assets/SynthMaker/Behaviours/GeneratedSynthBehaviour.cs",
+		"/C/Users/Andrey/Downloads/rtmidi-3.0.0.tar/rtmidi-3.0.0/msw/x64/Release/rtmidilib.dll",
+		"/C/Users/Andrey/Downloads/rtmidi-3.0.0.tar/rtmidi-3.0.0/rtmidi_c.h",
+		"/C/Users/Andrey/Downloads/reaper-license.rk",
+		"/D/Programming/Projects/SynthMaker/Assets/SynthMaker/Editor/Nodes/OscNode.cs",
+		"/D/Programming/Projects/SynthMaker/Doc/subl_proj.sublime-project",
+		"/C/Users/Andrey/Downloads/Package Control.sublime-settings",
+		"/C/Users/Andrey/Downloads/PlainTasks.sublime-settings",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/User/PlainTasks.sublime-settings",
+		"/C/Users/Andrey/Downloads/Preferences.sublime-settings",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Andrey/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Windows/Logs/CBS/CBS.log"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"PlayerNoteOff",
+			"channel_mask",
+			"channel_evt",
+			"selectedDevice",
+			"read",
+			"device",
+			"RtMidiCCallback"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/D/Programming/Projects/SynthMaker/Doc/subl_proj.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								181,
+								73
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 55.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.hex_viewer_inspector":
+	{
+		"height": 98.0
+	},
+	"pinned_build_system": "",
+	"project": "sublime.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"midipla",
+				"Source\\SynthMaker.Core\\MIDIPlayer.cs"
+			],
+			[
+				"rtmidia",
+				"Source\\SynthMaker.Core\\RTMidiApi.cs"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 200.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

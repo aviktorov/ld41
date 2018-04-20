@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": "D:\\Programming\\Game Jams\\ld41",
+			"file_exclude_patterns": ["*.csproj","*.sln","*.meta"],
+			"folder_exclude_patterns": ["Library", "Temp"]
+		}
+	]
+}
