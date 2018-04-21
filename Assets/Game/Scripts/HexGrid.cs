@@ -25,9 +25,19 @@ public static class HexGrid
 		return axial + axial_directions[direction];
 	}
 	
+	public static Vector2 GetOffsetAxial(Vector2 axial, int direction, float scale)
+	{
+		return axial + axial_directions[direction] * scale;
+	}
+	
 	public static Vector3 GetNeighborCube(Vector3 cube, int direction)
 	{
 		return cube + cube_directions[direction];
+	}
+	
+	public static Vector3 GetOffsetCube(Vector3 cube, int direction, float scale)
+	{
+		return cube + cube_directions[direction] * scale;
 	}
 	
 	public static Vector3 AxialToCube(Vector2 axial)
@@ -60,6 +70,15 @@ public static class HexGrid
 		return new Vector3(rx, ry, rz);
 	}
 	
+	public static float GetCubeDistance(Vector3 p0, Vector3 p1)
+	{
+		float diff_x = Mathf.Abs(p0.x - p1.x);
+		float diff_y = Mathf.Abs(p0.y - p1.y);
+		float diff_z = Mathf.Abs(p0.z - p1.z);
+		
+		return Mathf.Max(diff_x, Mathf.Max(diff_y, diff_z));
+	}
+	
 	public static Vector2 GetAxialRounded(Vector2 axial)
 	{
 		Vector3 cube = AxialToCube(axial);
@@ -76,6 +95,11 @@ public static class HexGrid
 		return new Vector3(x, 0.0f, z) * size;
 	}
 	
+	public static Vector3 CubeToCartesian(Vector3 cube, float size)
+	{
+		return AxialToCartesian(CubeToAxial(cube), size);
+	}
+	
 	public static Vector2 CartesianToAxial(Vector3 cartesian, float size)
 	{
 		float x = sqrt3_div_3 * cartesian.x - 1.0f / 3.0f * cartesian.z;
@@ -84,8 +108,18 @@ public static class HexGrid
 		return new Vector2(x, y) / size;
 	}
 	
+	public static Vector3 CartesianToCube(Vector3 cartesian, float size)
+	{
+		return AxialToCube(CartesianToAxial(cartesian, size));
+	}
+	
 	public static Vector2 CartesianToAxialRounded(Vector3 cartesian, float size)
 	{
 		return GetAxialRounded(CartesianToAxial(cartesian, size));
+	}
+	
+	public static Vector3 CartesianToCubeRounded(Vector3 cartesian, float size)
+	{
+		return GetCubeRounded(CartesianToCube(cartesian, size));
 	}
 }

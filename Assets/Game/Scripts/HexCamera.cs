@@ -6,7 +6,6 @@ public class HexCamera : MonoBehaviour
 {
 	
 	public Transform hex_cursor = null;
-	public float size = 1.0f;
 	
 	private Camera cached_camera = null;
 	
@@ -23,11 +22,10 @@ public class HexCamera : MonoBehaviour
 		if (!Physics.Raycast(ray, out hit))
 			return;
 		
-		Vector2 axial_rounded = HexGrid.CartesianToAxialRounded(hit.point, size);
-		Vector3 cartesian_rounded = HexGrid.AxialToCartesian(axial_rounded, size);
+		float size = HexGridManager.instance.cell_size;
 		
-		// restore up position
-		cartesian_rounded.y = hit.point.y;
+		Vector3 cube_rounded = HexGrid.CartesianToCubeRounded(hit.point, size);
+		Vector3 cartesian_rounded = HexGrid.CubeToCartesian(cube_rounded, size);
 		
 		hex_cursor.transform.position = cartesian_rounded;
 	}
