@@ -34,11 +34,6 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		}
 	}
 	
-	private void Update()
-	{
-		ClearHighlights();
-	}
-	
 	public void HighlightCellAxial(Vector2 axial)
 	{
 		Vector3 cartesian = HexGrid.AxialToCartesian(axial, cell_size);

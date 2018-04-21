@@ -20,11 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4161474068843750}
   - component: {fileID: 33074493255587022}
-  - component: {fileID: 136302101013475642}
   - component: {fileID: 23225878331408002}
   m_Layer: 0
   m_Name: WheelBackLeft
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,11 +37,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4065166852743644}
   - component: {fileID: 33810904356743012}
-  - component: {fileID: 136064196432927072}
   - component: {fileID: 23469234669193978}
   m_Layer: 0
   m_Name: WheelBackRight
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,11 +54,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4689885788341884}
   - component: {fileID: 33871421195413424}
-  - component: {fileID: 65128067135816192}
   - component: {fileID: 23899750790230636}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,11 +71,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4621575425263298}
   - component: {fileID: 33838007387522438}
-  - component: {fileID: 136499775189408272}
   - component: {fileID: 23901230214356052}
   m_Layer: 0
   m_Name: WheelFrontLeft
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,9 +88,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4562036440376240}
   - component: {fileID: 114093280798861726}
+  - component: {fileID: 65306764503566872}
   m_Layer: 0
   m_Name: Car
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,11 +105,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4784056709929832}
   - component: {fileID: 33144425574538094}
-  - component: {fileID: 136487225423701958}
   - component: {fileID: 23791751438451362}
   m_Layer: 0
   m_Name: Turret
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,11 +122,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4718094351831530}
   - component: {fileID: 33652253857950460}
-  - component: {fileID: 65274078526847356}
   - component: {fileID: 23738351505382694}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,11 +139,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4375486988627606}
   - component: {fileID: 33139266703336082}
-  - component: {fileID: 136113239819752796}
   - component: {fileID: 23847376636068064}
   m_Layer: 0
   m_Name: WheelFrontRight
-  m_TagString: Untagged
+  m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -551,30 +545,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1304003000652716}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65128067135816192
+--- !u!65 &65306764503566872
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1304003000652716}
+  m_GameObject: {fileID: 1622072482686198}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65274078526847356
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1924929950071830}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.35, y: 0.25, z: 0.7}
+  m_Center: {x: 0, y: 0.125, z: 0}
 --- !u!114 &114093280798861726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -588,81 +570,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_health: 5
   max_ap: 2
-  gear: 0
+  smoothness: 5
   heading: 0
+  gear: 1
   gears:
+  - speed: 0
+    steering_arc: 0
   - speed: 1
     steering_arc: 300
   - speed: 2
-    steering_arc: 214
+    steering_arc: 170
   - speed: 3
-    steering_arc: 100
+    steering_arc: 90
   - speed: 4
     steering_arc: 45
   - speed: 5
     steering_arc: 15
---- !u!136 &136064196432927072
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1090035434966532}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &136113239819752796
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1980862453164364}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &136302101013475642
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1085192870103720}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &136487225423701958
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1816883660474958}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &136499775189408272
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410430661457566}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

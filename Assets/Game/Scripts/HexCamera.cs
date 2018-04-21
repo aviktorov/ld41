@@ -16,17 +16,6 @@ public class HexCamera : MonoBehaviour
 	
 	private void Update()
 	{
-		Ray ray = cached_camera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		
-		if (!Physics.Raycast(ray, out hit))
-			return;
-		
-		float size = HexGridManager.instance.cell_size;
-		
-		Vector3 cube_rounded = HexGrid.CartesianToCubeRounded(hit.point, size);
-		Vector3 cartesian_rounded = HexGrid.CubeToCartesian(cube_rounded, size);
-		
-		hex_cursor.transform.position = cartesian_rounded;
+
 	}
 }
