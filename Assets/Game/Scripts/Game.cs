@@ -61,10 +61,13 @@ public class Game : MonoSingleton<Game> {
 		if (selected_car == null)
 			return;
 		
-		List<Vector3> positions = new List<Vector3>();
-		selected_car.GetSteerPositions(positions);
-		foreach (Vector3 position in positions)
-			HexGridManager.instance.HighlightCellCube(position);
+		Color steer_highlight_color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
+		Color desired_highlight_color = new Color(0.5f, 0.5f, 0.0f, 1.0f);
+		
+		foreach (Vector3 position in steer_positions)
+			HexGridManager.instance.HighlightCellCube(position, steer_highlight_color);
+		
+		HexGridManager.instance.HighlightCellCube(selected_car.GetDesiredPosition(), desired_highlight_color);
 	}
 	
 	public void RegisterCar(Car car)

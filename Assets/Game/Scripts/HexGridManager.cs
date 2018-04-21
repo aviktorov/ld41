@@ -34,7 +34,7 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		}
 	}
 	
-	public void HighlightCellAxial(Vector2 axial)
+	public void HighlightCellAxial(Vector2 axial, Color color)
 	{
 		Vector3 cartesian = HexGrid.AxialToCartesian(axial, cell_size);
 		cartesian.y = 100.0f;
@@ -55,17 +55,18 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		if (!mesh_renderer)
 			return;
 		
-		if (highlighted_cells.Contains(mesh_renderer))
-			return;
+		if (!highlighted_cells.Contains(mesh_renderer))
+			highlighted_cells.Add(mesh_renderer);
 		
-		mesh_renderer.sharedMaterial = highlighted_material;
-		highlighted_cells.Add(mesh_renderer);
+		mesh_renderer.material = highlighted_material;
+		mesh_renderer.material.color = color;
+		
 	}
 	
-	public void HighlightCellCube(Vector3 cube)
+	public void HighlightCellCube(Vector3 cube, Color color)
 	{
 		Vector2 axial = HexGrid.CubeToAxial(cube);
-		HighlightCellAxial(axial);
+		HighlightCellAxial(axial, color);
 	}
 	
 	public void ClearHighlights()
