@@ -7,7 +7,6 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 	private const int grid_mask = 1 << 8;
 	
 	public GameObject cell_prefab = null;
-	public Material highlighted_material = null;
 	public Material default_material = null;
 	public float cell_size = 0.5f;
 	public int grid_size = 10;
@@ -34,6 +33,11 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		}
 	}
 	
+	private void Update()
+	{
+		ClearHighlights();
+	}
+	
 	public void HighlightCellAxial(Vector2 axial, Color color)
 	{
 		Vector3 cartesian = HexGrid.AxialToCartesian(axial, cell_size);
@@ -58,9 +62,7 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		if (!highlighted_cells.Contains(mesh_renderer))
 			highlighted_cells.Add(mesh_renderer);
 		
-		mesh_renderer.material = highlighted_material;
 		mesh_renderer.material.color = color;
-		
 	}
 	
 	public void HighlightCellCube(Vector3 cube, Color color)
@@ -72,7 +74,10 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 	public void ClearHighlights()
 	{
 		foreach (MeshRenderer renderer in highlighted_cells)
+		{
+			DestroyImmediate(renderer.material);
 			renderer.sharedMaterial = default_material;
+		}
 		
 		highlighted_cells.Clear();
 	}

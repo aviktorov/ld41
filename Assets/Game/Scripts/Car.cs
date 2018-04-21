@@ -16,14 +16,13 @@ public class Car : MonoBehaviour
 	public int max_ap = 2;
 	
 	public float smoothness = 5.0f;
-	
-	[Range(0, 360.0f)]
-	public float heading = 0.0f;
-	
-	[Range(0, 4)]
-	public int gear = 0;
-	
 	public CarGear[] gears;
+	
+	private float heading = 0.0f;
+	private int gear = 0;
+	
+	private int current_checkpoint = 0;
+	private int current_lap = -1;
 	
 	private int health = 0;
 	private int ap = 0;
@@ -52,6 +51,9 @@ public class Car : MonoBehaviour
 	{
 		float cell_size = HexGridManager.instance.cell_size;
 		
+		Vector3 car_direction = transform.forward;
+		heading = Mathf.Atan2(car_direction.z, car_direction.x) * Mathf.Rad2Deg;
+		
 		cube_coordinates = HexGrid.CartesianToCubeRounded(transform.position, cell_size);
 		target_heading = heading;
 		
@@ -77,12 +79,27 @@ public class Car : MonoBehaviour
 	{
 		float cell_size = HexGridManager.instance.cell_size;
 		
-		car_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
+		int distance = (int)HexGrid.GetCubeDistance(desired_cube_coordinates, cube_coordinates);
+		Vector3 lerped_cube_coordinates = cube_coordinates;
 		
-		target_car_position = HexGrid.CubeToCartesian(desired_cube_coordinates, cell_size);
+		// trace car path
+		for (int i = 0; i <= distance; i++)
+		{
+			float k = (float)i / distance;
+			lerped_cube_coordinates = Vector3.Lerp(cube_coordinates, desired_cube_coordinates, k);
+			lerped_cube_coordinates = HexGrid.GetCubeRounded(lerped_cube_coordinates);
+			
+			if (Game.instance.IsValidCheckpoint(lerped_cube_coordinates, current_checkpoint))
+				Game.instance.NextCheckpoint(this);
+			
+			// TODO: check for obstacles
+		}
+		
+		cube_coordinates = lerped_cube_coordinates;
+		
+		target_car_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
 		target_heading = desired_heading;
 		
-		cube_coordinates = desired_cube_coordinates;
 		ap = max_ap;
 		
 		UpdateDesiredPosition();
@@ -99,7 +116,7 @@ public class Car : MonoBehaviour
 		if (speed == 0)
 			return;
 		
-		float cos_half_steering_arc = Mathf.Cos(7.0f * Mathf.Deg2Rad);
+		float cos_half_steering_arc = Mathf.Cos(7.5f * Mathf.Deg2Rad);
 		float cell_size = HexGridManager.instance.cell_size;
 		
 		Vector3 car_direction = new Vector3(Mathf.Cos(target_heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(target_heading * Mathf.Deg2Rad));
@@ -120,6 +137,8 @@ public class Car : MonoBehaviour
 				ring_cube_coordinates = HexGrid.GetNeighborCube(ring_cube_coordinates, side);
 			}
 		}
+		
+		// TODO: check for obstacles
 	}
 	
 	public void SetDesiredPosition(Vector3 position)
@@ -137,6 +156,26 @@ public class Car : MonoBehaviour
 	public Vector3 GetDesiredPosition()
 	{
 		return desired_cube_coordinates;
+	}
+	
+	public void SetCheckpoint(int num)
+	{
+		current_checkpoint = num;
+	}
+	
+	public int GetCheckpoint()
+	{
+		return current_checkpoint;
+	}
+	
+	public void SetLap(int lap)
+	{
+		current_lap = lap;
+	}
+	
+	public int GetLap()
+	{
+		return current_lap;
 	}
 	
 	public void GetSteerPositions(List<Vector3> positions)
@@ -172,6 +211,11 @@ public class Car : MonoBehaviour
 				ring_cube_coordinates = HexGrid.GetNeighborCube(ring_cube_coordinates, side);
 			}
 		}
+	}
+	
+	public int GetGear()
+	{
+		return gear;
 	}
 	
 	public void GearUp()

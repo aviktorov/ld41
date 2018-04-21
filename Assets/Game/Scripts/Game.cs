@@ -6,9 +6,12 @@ public class Game : MonoSingleton<Game> {
 	
 	public Transform cursor = null;
 	public Camera game_camera = null;
+	public RaceTrack track = null;
 	
 	private Car selected_car = null;
 	private Dictionary<int, Car> cars = new Dictionary<int, Car>();
+	private Dictionary<Vector3, int> checkpoints = new Dictionary<Vector3, int>();
+	private Dictionary<Vector3, int> obstacles = new Dictionary<Vector3, int>();
 	
 	public bool ui_in_use = false;
 	
@@ -56,7 +59,10 @@ public class Game : MonoSingleton<Game> {
 		}
 		
 		// highlights
-		HexGridManager.instance.ClearHighlights();
+		Color checkpoint_highlight_color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+		
+		foreach (Vector3 position in checkpoints.Keys)
+			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
 		
 		if (selected_car == null)
 			return;
@@ -70,6 +76,39 @@ public class Game : MonoSingleton<Game> {
 		HexGridManager.instance.HighlightCellCube(selected_car.GetDesiredPosition(), desired_highlight_color);
 	}
 	
+	public void NextCheckpoint(Car car)
+	{
+		int current_checkpoint = car.GetCheckpoint();
+		int current_lap = car.GetLap();
+		
+		int next_checkpoint = (current_checkpoint + 1) % track.GetNumCheckpoints();
+		int next_lap = current_lap + 1;
+		car.SetCheckpoint(next_checkpoint);
+		
+		if (current_checkpoint == 0)
+			car.SetLap(next_lap);
+		
+		Debug.LogFormat("New checkpoint: {0}, lap: {1}", car.GetCheckpoint(), car.GetLap());
+	}
+	
+	public void AddCheckpoint(Vector3 cube_coordinates, int checkpoint)
+	{
+		int id = 0;
+		if (!checkpoints.TryGetValue(cube_coordinates, out id))
+			checkpoints.Add(cube_coordinates, checkpoint);
+		
+		checkpoints[cube_coordinates] = checkpoint;
+	}
+	
+	public bool IsValidCheckpoint(Vector3 cube_coordinates, int checkpoint)
+	{
+		int id = 0;
+		if (!checkpoints.TryGetValue(cube_coordinates, out id))
+			return false;
+		
+		return id == checkpoint;
+	}
+	
 	public void RegisterCar(Car car)
 	{
 		cars.Add(car.gameObject.GetInstanceID(), car);
@@ -78,6 +117,11 @@ public class Game : MonoSingleton<Game> {
 	public void UnregisterCar(Car car)
 	{
 		cars.Remove(car.gameObject.GetInstanceID());
+	}
+	
+	public Dictionary<int, Car>.ValueCollection GetCars()
+	{
+		return cars.Values;
 	}
 	
 	public void Turn()
