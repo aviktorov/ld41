@@ -411,9 +411,16 @@ public class Game : MonoSingleton<Game> {
 		other_car.OnCarCollision(car);
 	}
 	
+	public void OnCarHit(Car car, Turret turret)
+	{
+		car.OnCarHit(turret);
+	}
+	
 	public void OnTurretFire(Turret turret)
 	{
-		Debug.Log("Boom!");
+		foreach(Car car in cars.Values)
+			if (car.GetCurrentPosition() == turret.GetFirePosition())
+				OnCarHit(car, turret);
 	}
 	
 	public void AddCheckpoint(Vector3 cube_coordinates, int checkpoint)

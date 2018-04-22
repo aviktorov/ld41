@@ -120,7 +120,14 @@ public class Car : MonoBehaviour
 		// TODO: better gear
 		turn_gear = 0;
 		
-		// TODO: modify heading
+		// TODO: modify heading?
+	}
+	
+	public void OnCarHit(Turret turret)
+	{
+		Damage(turret.damage);
+		
+		// TODO: modify gear?
 	}
 	
 	public void Damage(int damage)

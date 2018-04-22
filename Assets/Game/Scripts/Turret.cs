@@ -79,6 +79,7 @@ public class Turret : MonoBehaviour
 		{
 			want_to_fire = false;
 			Game.instance.OnTurretFire(this);
+			return;
 		}
 		
 		Car target = Game.instance.PredictClosestTarget(cube_coordinates, fire_radius);
