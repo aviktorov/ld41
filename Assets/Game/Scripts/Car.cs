@@ -57,11 +57,8 @@ public class Car : MonoBehaviour
 	{
 		float cell_size = HexGridManager.instance.cell_size;
 		
-		Vector3 car_direction = transform.forward;
-		
-		heading = Mathf.Atan2(car_direction.z, car_direction.x) * Mathf.Rad2Deg;
+		heading = Mathf.Atan2(transform.forward.z, transform.forward.x) * Mathf.Rad2Deg;
 		cube_coordinates = HexGrid.CartesianToCubeRounded(transform.position, cell_size);
-		
 		transform.position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
 		
 		desired_forward_cube_coordinates = cube_coordinates;
@@ -79,11 +76,11 @@ public class Car : MonoBehaviour
 		
 		float cell_size = HexGridManager.instance.cell_size;
 		
-		Vector3 target_car_direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(heading * Mathf.Deg2Rad));
-		Vector3 target_car_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
+		Vector3 target_direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(heading * Mathf.Deg2Rad));
+		Vector3 target_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
 		
-		transform.rotation = Quaternion.Lerp(tween_rotation, Quaternion.LookRotation(target_car_direction), tween_time);
-		transform.position = Vector3.Lerp(tween_position, target_car_position, tween_time);
+		transform.rotation = Quaternion.Lerp(tween_rotation, Quaternion.LookRotation(target_direction), tween_time);
+		transform.position = Vector3.Lerp(tween_position, target_position, tween_time);
 		
 		// TODO: all tweens here
 	}
@@ -93,9 +90,6 @@ public class Car : MonoBehaviour
 		turn_gear = desired_gear;
 		turn_heading = desired_heading;
 		turn_cube_coordinates = Game.instance.TraceCarPath(this);
-		
-		tween_position = transform.position;
-		tween_rotation = transform.rotation;
 	}
 	
 	public void EndTurn()
@@ -104,6 +98,11 @@ public class Car : MonoBehaviour
 		heading = turn_heading;
 		gear = turn_gear;
 		desired_gear = turn_gear;
+		
+		tween_position = transform.position;
+		tween_rotation = transform.rotation;
+		
+		UpdateDesiredPosition();
 	}
 	
 	public void OnObstacleCollision()

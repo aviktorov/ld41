@@ -27,6 +27,7 @@ public class Game : MonoSingleton<Game> {
 	private float current_turn_tween_time = 0.0f;
 	
 	private Dictionary<int, Car> cars = new Dictionary<int, Car>();
+	private Dictionary<int, Turret> turrets = new Dictionary<int, Turret>();
 	private Dictionary<Vector3, int> checkpoints = new Dictionary<Vector3, int>();
 	private Dictionary<Vector3, int> obstacles = new Dictionary<Vector3, int>();
 	
@@ -121,6 +122,15 @@ public class Game : MonoSingleton<Game> {
 				
 				HexGridManager.instance.HighlightCellCube(traced_position, type);
 			}
+		}
+		
+		foreach(Turret turret in turrets.Values)
+		{
+			Vector3 fire_position = turret.GetFirePosition();
+			HexGridManager.instance.HighlightCellCube(fire_position, HighlightType.Collision);
+			
+			if (turret.IsReadyToFire())
+				HexGridManager.instance.AddCellIconCube(fire_position, IconType.HitDamage);
 		}
 		
 		// check win / lose conditions
@@ -295,6 +305,35 @@ public class Game : MonoSingleton<Game> {
 		return false;
 	}
 	
+	public Vector3 TraceRay(Vector3 cartesian_position, Vector3 cartesian_direction, int max_cube_distance)
+	{
+		float cell_size = HexGridManager.instance.cell_size;
+		
+		Vector3 p0 = HexGrid.CartesianToCube(cartesian_position, cell_size);
+		Vector3 p1 = HexGrid.CartesianToCube(cartesian_position + cartesian_direction, cell_size);
+		
+		float distance = HexGrid.GetCubeDistance(p0, p1);
+		Vector3 traced_cube_coordinates = Vector3.zero;
+		
+		for (int i = 0; i <= max_cube_distance; i++)
+		{
+			float k = (float)i / distance;
+			traced_cube_coordinates = p0 + (p1 - p0) * k;
+			traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
+			
+			// static obstacles
+			if (IsObstacle(traced_cube_coordinates))
+				break;
+			
+			// dynamic obstacles (cars, projectiles, beams, etc.)
+			Car other_car = GetIntersectedCar(null, traced_cube_coordinates);
+			if (other_car != null)
+				break;
+		}
+		
+		return traced_cube_coordinates;
+	}
+	
 	public Vector3 TracePath(Car car, Vector3 p0, Vector3 p1, out bool collision)
 	{
 		collision = false;
@@ -329,6 +368,23 @@ public class Game : MonoSingleton<Game> {
 		return traced_cube_coordinates;
 	}
 	
+	public Car PredictClosestTarget(Vector3 cube_coordinates, int radius)
+	{
+		Car target = null;
+		int target_distance = radius + 1;
+		
+		foreach(Car car in cars.Values)
+		{
+			int distance = (int)HexGrid.GetCubeDistance(car.GetDesiredPosition(), cube_coordinates);
+			if (distance < target_distance)
+			{
+				target = car;
+				target_distance = distance;
+			}
+		}
+		return target;
+	}
+	
 	public void OnCheckpointReached(Car car)
 	{
 		int current_checkpoint = car.GetCheckpoint();
@@ -351,6 +407,11 @@ public class Game : MonoSingleton<Game> {
 	{
 		car.OnCarCollision(other_car);
 		other_car.OnCarCollision(car);
+	}
+	
+	public void OnTurretFire(Turret turret)
+	{
+		Debug.Log("Boom!");
 	}
 	
 	public void AddCheckpoint(Vector3 cube_coordinates, int checkpoint)
@@ -404,6 +465,16 @@ public class Game : MonoSingleton<Game> {
 		return cars.Values;
 	}
 	
+	public void RegisterTurret(Turret turret)
+	{
+		turrets.Add(turret.gameObject.GetInstanceID(), turret);
+	}
+	
+	public void UnregisterTurret(Turret turret)
+	{
+		turrets.Remove(turret.gameObject.GetInstanceID());
+	}
+	
 	public void UpdateDesiredPositions()
 	{
 		foreach (Car car in cars.Values)
@@ -418,7 +489,11 @@ public class Game : MonoSingleton<Game> {
 		foreach(Car car in cars.Values)
 			car.EndTurn();
 		
-		UpdateDesiredPositions();
+		foreach(Turret turret in turrets.Values)
+			turret.BeginTurn();
+
+		foreach(Turret turret in turrets.Values)
+			turret.EndTurn();
 		
 		state = GameState.EndTurn;
 		current_turn_tween_time = 0.0f;
