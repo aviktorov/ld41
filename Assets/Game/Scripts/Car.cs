@@ -361,7 +361,7 @@ public class Car : MonoBehaviour
 			return;
 		
 		desired_gear = Mathf.Min(desired_gear + 1, gears.Length - 1);
-		Game.instance.UpdateDesiredPositions();
+		UpdateDesiredPosition();
 	}
 	
 	public void GearDown()
@@ -370,6 +370,6 @@ public class Car : MonoBehaviour
 			return;
 		
 		desired_gear = Mathf.Max(desired_gear - 1, 0);
-		Game.instance.UpdateDesiredPositions();
+		UpdateDesiredPosition();
 	}
 }

@@ -232,38 +232,40 @@ public class Game : MonoSingleton<Game> {
 		
 		int distance = (int)HexGrid.GetCubeDistance(p0, p1);
 		Vector3 traced_cube_coordinates = p0;
+		Vector3 prev_traced_cube_coordinates = p0;
 		
 		if (distance == 0)
 			return traced_cube_coordinates;
 		
 		for (int i = 0; i <= distance; i++)
 		{
+			prev_traced_cube_coordinates = traced_cube_coordinates;
+			
 			float k = Mathf.Clamp01((float)i / distance);
-			float next_k = Mathf.Clamp01((float)(i + 1) / distance);
 			traced_cube_coordinates = Vector3.Lerp(p0, p1, k);
 			traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
-			
-			Vector3 next_traced_cube_coordinates = Vector3.Lerp(p0, p1, next_k);
-			next_traced_cube_coordinates = HexGrid.GetCubeRounded(next_traced_cube_coordinates);
 			
 			// checkpoints
 			if (IsValidCheckpoint(traced_cube_coordinates, current_checkpoint))
 				OnCheckpointReached(car);
 			
 			// static obstacles
-			if (IsObstacle(next_traced_cube_coordinates))
+			if (IsObstacle(traced_cube_coordinates))
 			{
+				traced_cube_coordinates = prev_traced_cube_coordinates;
 				OnObstacleCollision(car);
 				break;
 			}
 			
-			// dynamic obstacles (cars, projectiles, beams, etc.)
-			Car other_car = GetIntersectedCar(car, next_traced_cube_coordinates);
-			if (other_car)
-			{
-				OnCarCollision(car, other_car);
-				break;
-			}
+			// TODO: laser walls
+		}
+		
+		// cars
+		Car other_car = GetIntersectedCar(car, traced_cube_coordinates);
+		if (other_car)
+		{
+			traced_cube_coordinates = prev_traced_cube_coordinates;
+			OnCarCollision(car, other_car);
 		}
 		
 		return traced_cube_coordinates;
@@ -276,10 +278,7 @@ public class Game : MonoSingleton<Game> {
 			if(other_car == car)
 				continue;
 			
-			Vector3 p0 = other_car.GetCurrentPosition();
-			Vector3 p1 = other_car.GetDesiredPosition();
-			
-			if (HasIntersection(p0, p1, p))
+			if (other_car.GetDesiredPosition() == p)
 				return other_car;
 		}
 		
@@ -347,7 +346,7 @@ public class Game : MonoSingleton<Game> {
 		
 		for (int i = 0; i <= distance; i++)
 		{
-			float k = (float)i / distance;
+			float k = Mathf.Clamp01((float)i / distance);
 			traced_cube_coordinates = Vector3.Lerp(p0, p1, k);
 			traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
 			
@@ -358,14 +357,13 @@ public class Game : MonoSingleton<Game> {
 				break;
 			}
 			
-			// dynamic obstacles (cars, projectiles, beams, etc.)
-			Car other_car = GetIntersectedCar(car, traced_cube_coordinates);
-			if (other_car)
-			{
-				collision = true;
-				break;
-			}
+			// TODO: laser walls
 		}
+		
+		// cars
+		Car other_car = GetIntersectedCar(car, traced_cube_coordinates);
+		if (other_car)
+			collision = true;
 		
 		return traced_cube_coordinates;
 	}
@@ -485,12 +483,6 @@ public class Game : MonoSingleton<Game> {
 	public void UnregisterTurret(Turret turret)
 	{
 		turrets.Remove(turret.gameObject.GetInstanceID());
-	}
-	
-	public void UpdateDesiredPositions()
-	{
-		foreach (Car car in cars.Values)
-			car.UpdateDesiredPosition();
 	}
 	
 	public void Turn()

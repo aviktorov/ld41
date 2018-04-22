@@ -30,7 +30,7 @@ public class GameUI : MonoBehaviour
 	
 	private void OnGameplayGUI()
 	{
-		Rect ui_area = new Rect((Screen.width - width) / 2, Screen.height - height, width, height);
+		Rect ui_area = new Rect((Screen.width - width) / 2, 0, width, height);
 		
 		GUILayout.BeginArea(ui_area);
 		GUILayout.BeginHorizontal("box");
