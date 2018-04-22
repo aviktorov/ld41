@@ -91,9 +91,10 @@ public class Game : MonoSingleton<Game> {
 			Vector3 cell_position = HexGrid.CartesianToCubeRounded(hit.point, size);
 			Vector3 current_position = selected_car.GetCurrentPosition();
 			
+			bool collision = false;
 			foreach (Vector3 position in steer_positions)
 			{
-				Vector3 traced_position = TracePath(selected_car, current_position, position);
+				Vector3 traced_position = TracePath(selected_car, current_position, position, out collision);
 				if (traced_position != cell_position)
 					continue;
 				
@@ -102,7 +103,7 @@ public class Game : MonoSingleton<Game> {
 			}
 		}
 		
-		// car
+		// selected car
 		if (selected_car != null)
 		{
 			Vector3 current_position = selected_car.GetCurrentPosition();
@@ -110,18 +111,18 @@ public class Game : MonoSingleton<Game> {
 			
 			HexGridManager.instance.HighlightCellCube(current_position, Color.white);
 			
+			bool collision = false;
 			foreach (Vector3 position in all_steer_positions)
 			{
-				Vector3 traced_position = TracePath(selected_car, current_position, position);
+				Vector3 traced_position = TracePath(selected_car, current_position, position, out collision);
 				bool is_available = steer_positions.Contains(position);
 				bool is_desired = position == desired_position;
-				bool has_interruptions = traced_position != position;
 				
 				Color color = (is_available) ? available_steer_highlight_color : prohibited_steer_highlight_color;
 				if (is_desired)
 					color = desired_highlight_color;
 				
-				if (has_interruptions)
+				if (collision)
 					color = collision_highlight_color;
 				
 				HexGridManager.instance.HighlightCellCube(traced_position, color);
@@ -179,13 +180,14 @@ public class Game : MonoSingleton<Game> {
 	
 	private void Update()
 	{
+		/*
 		// visualize track
 		foreach (Vector3 position in checkpoints.Keys)
 			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
 		
 		foreach (Vector3 position in obstacles.Keys)
 			HexGridManager.instance.HighlightCellCube(position, obstacle_highlight_color);
-		
+		/**/
 		// process game logic
 		switch(state)
 		{
@@ -300,8 +302,9 @@ public class Game : MonoSingleton<Game> {
 		return false;
 	}
 	
-	public Vector3 TracePath(Car car, Vector3 p0, Vector3 p1)
+	public Vector3 TracePath(Car car, Vector3 p0, Vector3 p1, out bool collision)
 	{
+		collision = false;
 		int distance = (int)HexGrid.GetCubeDistance(p0, p1);
 		Vector3 traced_cube_coordinates = p0;
 		
@@ -316,12 +319,18 @@ public class Game : MonoSingleton<Game> {
 			
 			// static obstacles
 			if (IsObstacle(traced_cube_coordinates))
+			{
+				collision = true;
 				break;
+			}
 			
 			// dynamic obstacles (cars, projectiles, beams, etc.)
 			Car other_car = GetIntersectedCar(car, traced_cube_coordinates);
 			if (other_car)
+			{
+				collision = true;
 				break;
+			}
 		}
 		
 		return traced_cube_coordinates;
