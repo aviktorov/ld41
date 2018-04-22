@@ -8,6 +8,28 @@ public class GameUI : MonoBehaviour
 	private const int height = 200;
 	private void OnGUI()
 	{
+		switch (Game.instance.GetState())
+		{
+			case GameState.Gameplay: OnGameplayGUI(); break;
+			case GameState.Win: OnEndGUI("You win!"); break;
+			case GameState.Lose: OnEndGUI("You lose!"); break;
+		}
+	}
+	
+	private void OnEndGUI(string text)
+	{
+		Rect ui_area = new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height);
+		
+		GUILayout.BeginArea(ui_area);
+		GUILayout.Label(text);
+		if (GUILayout.Button("Restart"))
+			Game.instance.Restart();
+		
+		GUILayout.EndArea();
+	}
+	
+	private void OnGameplayGUI()
+	{
 		Rect ui_area = new Rect((Screen.width - width) / 2, Screen.height - height, width, height);
 		
 		GUILayout.BeginArea(ui_area);

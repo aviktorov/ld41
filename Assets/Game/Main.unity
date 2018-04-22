@@ -385,6 +385,7 @@ MonoBehaviour:
   cursor: {fileID: 1211592731}
   game_camera: {fileID: 1991178427}
   track: {fileID: 111217258}
+  player_team: 0
   checkpoint_highlight_color: {r: 0, g: 0.30882353, b: 0, a: 0.453}
   obstacle_highlight_color: {r: 0.07352942, g: 0, b: 0, a: 1}
   prohibited_steer_highlight_color: {r: 0.017841691, g: 0.09625492, b: 0.16176468,
@@ -392,6 +393,7 @@ MonoBehaviour:
   available_steer_highlight_color: {r: 0.09991349, g: 0.35394648, b: 0.5661765, a: 0.919}
   desired_highlight_color: {r: 0, g: 0.71034503, b: 1, a: 1}
   collision_highlight_color: {r: 0.7, g: 0.1, b: 0.1, a: 0.397}
+  turn_tween_duration: 1
   ui_in_use: 0
 --- !u!1001 &434658337
 Prefab:
@@ -435,6 +437,11 @@ Prefab:
     - target: {fileID: 1622072482686198, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
       propertyPath: m_Name
       value: Car2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: team
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}

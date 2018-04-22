@@ -1,6 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public enum GameState
+{
+	Intro,
+	Gameplay,
+	EndTurn,
+	Win,
+	Lose,
+}
 
 public class Game : MonoSingleton<Game> {
 	
@@ -8,21 +18,35 @@ public class Game : MonoSingleton<Game> {
 	public Camera game_camera = null;
 	public RaceTrack track = null;
 	
+	public int player_team = 0;
+	
 	public Color checkpoint_highlight_color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
 	public Color obstacle_highlight_color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
 	public Color prohibited_steer_highlight_color = new Color(0.5f, 0.5f, 0.5f, 0.9f);
 	public Color available_steer_highlight_color = new Color(0.8f, 0.8f, 0.8f, 1.0f);
 	public Color desired_highlight_color = new Color(0.5f, 0.5f, 0.0f, 1.0f);
 	public Color collision_highlight_color = new Color(0.7f, 0.1f, 0.1f, 1.0f);
-
+	
+	public float turn_tween_duration = 1.0f;
+	public bool ui_in_use = false;
+	
 	private Car selected_car = null;
+	private float current_turn_tween_time = 0.0f;
+	
 	private Dictionary<int, Car> cars = new Dictionary<int, Car>();
 	private Dictionary<Vector3, int> checkpoints = new Dictionary<Vector3, int>();
 	private Dictionary<Vector3, int> obstacles = new Dictionary<Vector3, int>();
 	
-	public bool ui_in_use = false;
+	private GameState state = GameState.Intro;
 	
-	private void Update () {
+	private void ProcessIntro()
+	{
+		// TODO: intro
+		state = GameState.Gameplay;
+	}
+	
+	private void ProcessGameplay()
+	{
 		// raycast
 		RaycastHit hit;
 		Ray ray = game_camera.ScreenPointToRay(Input.mousePosition);
@@ -39,8 +63,14 @@ public class Game : MonoSingleton<Game> {
 			
 			cursor.position = cartesian_rounded;
 			
-			if (hit.collider.tag == "Car")
-				intersected_car = hit.collider.gameObject.GetComponent<Car>();
+			foreach(Car car in cars.Values)
+			{
+				if (car.GetCurrentPosition() != cube_rounded)
+					continue;
+				
+				intersected_car = car;
+				break;
+			}
 		}
 		
 		// car selection
@@ -72,18 +102,13 @@ public class Game : MonoSingleton<Game> {
 			}
 		}
 		
-		// track
-		foreach (Vector3 position in checkpoints.Keys)
-			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
-		
-		foreach (Vector3 position in obstacles.Keys)
-			HexGridManager.instance.HighlightCellCube(position, obstacle_highlight_color);
-		
 		// car
 		if (selected_car != null)
 		{
 			Vector3 current_position = selected_car.GetCurrentPosition();
 			Vector3 desired_position = selected_car.GetDesiredPosition();
+			
+			HexGridManager.instance.HighlightCellCube(current_position, Color.white);
 			
 			foreach (Vector3 position in all_steer_positions)
 			{
@@ -102,6 +127,94 @@ public class Game : MonoSingleton<Game> {
 				HexGridManager.instance.HighlightCellCube(traced_position, color);
 			}
 		}
+		
+		// check win / lose conditions
+		bool all_enemies_dead = true;
+		bool all_players_dead = true;
+		
+		bool player_reached_finish = false;
+		bool enemy_reached_fiinsh = false;
+		
+		foreach(Car car in cars.Values)
+		{
+			if (car.GetLap() >= track.num_laps)
+			{
+				if (car.team == player_team)
+					player_reached_finish = true;
+				else
+					enemy_reached_fiinsh = true;
+			}
+			
+			if (car.GetHealth() != 0)
+			{
+				if (car.team == player_team)
+					all_players_dead = false;
+				else
+					all_enemies_dead = false;
+			}
+		}
+		
+		if (all_enemies_dead || player_reached_finish)
+			state = GameState.Win;
+		else if (all_players_dead || enemy_reached_fiinsh)
+			state = GameState.Lose;
+	}
+	
+	private void ProcessEndTurn()
+	{
+		current_turn_tween_time += Time.deltaTime;
+		if (current_turn_tween_time > turn_tween_duration)
+			state = GameState.Gameplay;
+	}
+	
+	private void ProcessWin()
+	{
+		// TODO: UI tween
+	}
+	
+	private void ProcessLose()
+	{
+		// TODO: UI tween
+	}
+	
+	private void Update()
+	{
+		// visualize track
+		foreach (Vector3 position in checkpoints.Keys)
+			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
+		
+		foreach (Vector3 position in obstacles.Keys)
+			HexGridManager.instance.HighlightCellCube(position, obstacle_highlight_color);
+		
+		// process game logic
+		switch(state)
+		{
+			case GameState.Intro: ProcessIntro(); break;
+			case GameState.Gameplay: ProcessGameplay(); break;
+			case GameState.EndTurn: ProcessEndTurn(); break;
+			case GameState.Win: ProcessWin(); break;
+			case GameState.Lose: ProcessLose(); break;
+		}
+	}
+	
+	public void Restart()
+	{
+		SceneManager.LoadScene("Main");
+	}
+	
+	public GameState GetState()
+	{
+		return state;
+	}
+	
+	public float GetTurnTweenTime()
+	{
+		return current_turn_tween_time;
+	}
+	
+	public float GetTurnTweenTimeNormalized()
+	{
+		return Mathf.Clamp01(current_turn_tween_time / turn_tween_duration);
 	}
 	
 	public Vector3 TraceCarPath(Car car)
@@ -304,6 +417,9 @@ public class Game : MonoSingleton<Game> {
 			car.EndTurn();
 		
 		UpdateDesiredPositions();
+		
+		state = GameState.EndTurn;
+		current_turn_tween_time = 0.0f;
 	}
 	
 	public Car GetSelectedCar()

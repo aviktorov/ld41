@@ -12,6 +12,9 @@ public struct CarGear
 
 public class Car : MonoBehaviour
 {
+	public int team = 0;
+	public Color team_color = Color.white;
+	
 	public int max_health = 5;
 	public int max_ap = 2;
 	
@@ -19,7 +22,7 @@ public class Car : MonoBehaviour
 	public CarGear[] gears;
 	
 	private int current_checkpoint = 0;
-	private int current_lap = -1;
+	private int current_lap = 0;
 	
 	private int health = 0;
 	
@@ -35,6 +38,9 @@ public class Car : MonoBehaviour
 	private float heading;
 	private float desired_heading;
 	private float turn_heading;
+	
+	private Vector3 tween_position;
+	private Quaternion tween_rotation;
 	
 	private void Awake()
 	{
@@ -56,6 +62,8 @@ public class Car : MonoBehaviour
 		heading = Mathf.Atan2(car_direction.z, car_direction.x) * Mathf.Rad2Deg;
 		cube_coordinates = HexGrid.CartesianToCubeRounded(transform.position, cell_size);
 		
+		transform.position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
+		
 		desired_forward_cube_coordinates = cube_coordinates;
 		desired_cube_coordinates = cube_coordinates;
 		desired_heading = heading;
@@ -63,13 +71,19 @@ public class Car : MonoBehaviour
 	
 	private void Update()
 	{
+		if (Game.instance.GetState() != GameState.EndTurn)
+			return;
+		
+		float tween_time = Game.instance.GetTurnTweenTimeNormalized();
+		tween_time = TweenUtils.Smootherstep(tween_time);
+		
 		float cell_size = HexGridManager.instance.cell_size;
 		
 		Vector3 target_car_direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(heading * Mathf.Deg2Rad));
 		Vector3 target_car_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
 		
-		transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target_car_direction), smoothness * Time.deltaTime);
-		transform.position = Vector3.Lerp(transform.position, target_car_position, smoothness * Time.deltaTime);
+		transform.rotation = Quaternion.Lerp(tween_rotation, Quaternion.LookRotation(target_car_direction), tween_time);
+		transform.position = Vector3.Lerp(tween_position, target_car_position, tween_time);
 		
 		// TODO: all tweens here
 	}
@@ -79,6 +93,9 @@ public class Car : MonoBehaviour
 		turn_gear = desired_gear;
 		turn_heading = desired_heading;
 		turn_cube_coordinates = Game.instance.TraceCarPath(this);
+		
+		tween_position = transform.position;
+		tween_rotation = transform.rotation;
 	}
 	
 	public void EndTurn()
@@ -113,8 +130,6 @@ public class Car : MonoBehaviour
 			return;
 		
 		health = Mathf.Max(health - damage, 0);
-		if (health == 0)
-			Debug.Log("I'm dead!");
 	}
 	
 	public void UpdateDesiredPosition()
