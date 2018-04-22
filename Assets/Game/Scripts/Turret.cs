@@ -58,14 +58,19 @@ public class Turret : MonoBehaviour
 		transform.position = Vector3.Lerp(tween_position, target_position, tween_time);
 	}
 	
-	public bool IsReadyToFire()
+	public Vector3 GetCurrentPosition()
 	{
-		return want_to_fire && (current_fire_cooldown == 0);
+		return cube_coordinates;
 	}
 	
 	public Vector3 GetFirePosition()
 	{
 		return fire_coordinates;
+	}
+	
+	public bool IsReadyToFire()
+	{
+		return want_to_fire && (current_fire_cooldown == 0);
 	}
 	
 	public void BeginTurn()
@@ -98,7 +103,7 @@ public class Turret : MonoBehaviour
 		
 		int fire_distance = (int)HexGrid.GetCubeDistance(cube_coordinates, target.GetDesiredPosition());
 		fire_distance = Mathf.Min(fire_distance, fire_radius);
-		fire_coordinates = Game.instance.TraceRay(transform.position, turret_direction, fire_distance);
+		fire_coordinates = Game.instance.TraceRay(transform.position, turret_direction, 1, fire_distance);
 		
 		// update turret fire conditions
 		if (want_to_fire)

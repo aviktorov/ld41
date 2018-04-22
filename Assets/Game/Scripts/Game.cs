@@ -126,11 +126,13 @@ public class Game : MonoSingleton<Game> {
 		
 		foreach(Turret turret in turrets.Values)
 		{
-			Vector3 fire_position = turret.GetFirePosition();
-			HexGridManager.instance.HighlightCellCube(fire_position, HighlightType.Collision);
+			if (!turret.IsReadyToFire())
+				continue;
 			
-			if (turret.IsReadyToFire())
-				HexGridManager.instance.AddCellIconCube(fire_position, IconType.HitDamage);
+			Vector3 fire_position = turret.GetFirePosition();
+			
+			HexGridManager.instance.HighlightCellCube(fire_position, HighlightType.Collision);
+			HexGridManager.instance.AddCellIconCube(fire_position, IconType.HitDamage);
 		}
 		
 		// check win / lose conditions
@@ -305,7 +307,7 @@ public class Game : MonoSingleton<Game> {
 		return false;
 	}
 	
-	public Vector3 TraceRay(Vector3 cartesian_position, Vector3 cartesian_direction, int max_cube_distance)
+	public Vector3 TraceRay(Vector3 cartesian_position, Vector3 cartesian_direction, int start_cube_distance, int max_cube_distance)
 	{
 		float cell_size = HexGridManager.instance.cell_size;
 		
@@ -315,7 +317,7 @@ public class Game : MonoSingleton<Game> {
 		float distance = HexGrid.GetCubeDistance(p0, p1);
 		Vector3 traced_cube_coordinates = Vector3.zero;
 		
-		for (int i = 0; i <= max_cube_distance; i++)
+		for (int i = start_cube_distance; i <= max_cube_distance; i++)
 		{
 			float k = (float)i / distance;
 			traced_cube_coordinates = p0 + (p1 - p0) * k;
@@ -443,11 +445,14 @@ public class Game : MonoSingleton<Game> {
 	
 	public bool IsObstacle(Vector3 cube_coordinates)
 	{
-		int id = 0;
-		if (!obstacles.TryGetValue(cube_coordinates, out id))
-			return false;
+		if (obstacles.ContainsKey(cube_coordinates))
+			return true;
 		
-		return true;
+		foreach(Turret turret in turrets.Values)
+			if (turret.GetCurrentPosition() == cube_coordinates)
+				return true;
+		
+		return false;
 	}
 	
 	public void RegisterCar(Car car)
