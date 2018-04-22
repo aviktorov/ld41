@@ -8,6 +8,11 @@ public class Game : MonoSingleton<Game> {
 	public Camera game_camera = null;
 	public RaceTrack track = null;
 	
+	public Color checkpoint_highlight_color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+	public Color prohibited_steer_highlight_color = new Color(0.5f, 0.5f, 0.5f, 0.9f);
+	public Color available_steer_highlight_color = new Color(0.8f, 0.8f, 0.8f, 1.0f);
+	public Color desired_highlight_color = new Color(0.5f, 0.5f, 0.0f, 1.0f);
+
 	private Car selected_car = null;
 	private Dictionary<int, Car> cars = new Dictionary<int, Car>();
 	private Dictionary<Vector3, int> checkpoints = new Dictionary<Vector3, int>();
@@ -41,8 +46,12 @@ public class Game : MonoSingleton<Game> {
 			selected_car = intersected_car;
 		
 		List<Vector3> steer_positions = new List<Vector3>();
+		List<Vector3> all_steer_positions = new List<Vector3>();
 		if (selected_car)
-			selected_car.GetSteerPositions(steer_positions);
+		{
+			selected_car.GetAvailableSteerPositions(steer_positions);
+			selected_car.GetAllSteerPositions(all_steer_positions);
+		}
 		
 		// cell selection
 		if(selected_car && Input.GetMouseButtonDown(1) && !ui_in_use)
@@ -59,7 +68,6 @@ public class Game : MonoSingleton<Game> {
 		}
 		
 		// highlights
-		Color checkpoint_highlight_color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
 		
 		foreach (Vector3 position in checkpoints.Keys)
 			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
@@ -67,11 +75,11 @@ public class Game : MonoSingleton<Game> {
 		if (selected_car == null)
 			return;
 		
-		Color steer_highlight_color = new Color(0.5f, 0.5f, 0.5f, 1.0f);
-		Color desired_highlight_color = new Color(0.5f, 0.5f, 0.0f, 1.0f);
+		foreach (Vector3 position in all_steer_positions)
+			HexGridManager.instance.HighlightCellCube(position, prohibited_steer_highlight_color);
 		
 		foreach (Vector3 position in steer_positions)
-			HexGridManager.instance.HighlightCellCube(position, steer_highlight_color);
+			HexGridManager.instance.HighlightCellCube(position, available_steer_highlight_color);
 		
 		HexGridManager.instance.HighlightCellCube(selected_car.GetDesiredPosition(), desired_highlight_color);
 	}
@@ -87,8 +95,6 @@ public class Game : MonoSingleton<Game> {
 		
 		if (current_checkpoint == 0)
 			car.SetLap(next_lap);
-		
-		Debug.LogFormat("New checkpoint: {0}, lap: {1}", car.GetCheckpoint(), car.GetLap());
 	}
 	
 	public void AddCheckpoint(Vector3 cube_coordinates, int checkpoint)

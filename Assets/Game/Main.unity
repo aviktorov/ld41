@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 6825625}
   - component: {fileID: 6825624}
   - component: {fileID: 6825628}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Checkpoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 18625671}
   - component: {fileID: 18625670}
   - component: {fileID: 18625674}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Checkpoint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,6 +413,10 @@ MonoBehaviour:
   cursor: {fileID: 1211592731}
   game_camera: {fileID: 1991178427}
   track: {fileID: 111217258}
+  checkpoint_highlight_color: {r: 0, g: 1, b: 0, a: 1}
+  prohibited_steer_highlight_color: {r: 0.4705882, g: 0.4705882, b: 0.4705882, a: 0.9}
+  available_steer_highlight_color: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  desired_highlight_color: {r: 0.5, g: 0.5, b: 0, a: 1}
   ui_in_use: 0
 --- !u!1001 &434658337
 Prefab:
@@ -518,7 +522,7 @@ GameObject:
   - component: {fileID: 1184486837}
   - component: {fileID: 1184486836}
   - component: {fileID: 1184486840}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Checkpoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

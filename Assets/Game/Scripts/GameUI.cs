@@ -18,6 +18,9 @@ public class GameUI : MonoBehaviour
 			
 			GUILayout.Label(string.Format("Gear: {0}", car.GetGear()));
 			GUILayout.Label(string.Format("Lap: {0}", car.GetLap()));
+			GUILayout.FlexibleSpace();
+			GUILayout.Label(string.Format("Health: {0} / {1}", car.GetHealth(), car.max_health));
+			GUILayout.Label(string.Format("AP: {0} / {1}", car.GetAPLeft(), car.max_ap));
 			
 			GUILayout.EndVertical();
 		}
@@ -26,11 +29,15 @@ public class GameUI : MonoBehaviour
 		Car selected_car = Game.instance.GetSelectedCar();
 		if (selected_car != null)
 		{
+			GUI.enabled = selected_car.CanGearUp();
 			if (GUILayout.Button("Gear up"))
 				selected_car.GearUp();
 			
+			GUI.enabled = selected_car.CanGearDown();
 			if (GUILayout.Button("Gear down"))
 				selected_car.GearDown();
+			
+			GUI.enabled = true;
 		}
 		
 		GUILayout.FlexibleSpace();

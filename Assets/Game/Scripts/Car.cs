@@ -18,16 +18,17 @@ public class Car : MonoBehaviour
 	public float smoothness = 5.0f;
 	public CarGear[] gears;
 	
-	private int gear = 0;
-	
 	private int current_checkpoint = 0;
 	private int current_lap = -1;
 	
 	private int health = 0;
-	private int ap = 0;
+	
+	private int gear = 0;
+	private int desired_gear = 0;
 	
 	private Vector3 cube_coordinates;
 	private Vector3 desired_cube_coordinates;
+	private Vector3 desired_forward_cube_coordinates;
 	
 	private float heading;
 	private float desired_heading;
@@ -36,7 +37,6 @@ public class Car : MonoBehaviour
 	{
 		Game.instance.RegisterCar(this);
 		health = max_health;
-		ap = max_ap;
 	}
 	
 	private void Destroy()
@@ -53,7 +53,9 @@ public class Car : MonoBehaviour
 		heading = Mathf.Atan2(car_direction.z, car_direction.x) * Mathf.Rad2Deg;
 		cube_coordinates = HexGrid.CartesianToCubeRounded(transform.position, cell_size);
 		
-		SetDesiredPosition(cube_coordinates);
+		desired_forward_cube_coordinates = cube_coordinates;
+		desired_cube_coordinates = cube_coordinates;
+		desired_heading = heading;
 	}
 	
 	private void Update()
@@ -75,6 +77,7 @@ public class Car : MonoBehaviour
 		Vector3 traced_cube_coordinates = cube_coordinates;
 		
 		// trace car path
+		// TODO: move to Game.Turn()
 		if (distance > 0)
 		{
 			for (int i = 0; i <= distance; i++)
@@ -92,8 +95,7 @@ public class Car : MonoBehaviour
 		
 		cube_coordinates = traced_cube_coordinates;
 		heading = desired_heading;
-		
-		ap = max_ap;
+		gear = desired_gear;
 		
 		UpdateDesiredPosition();
 	}
@@ -101,15 +103,15 @@ public class Car : MonoBehaviour
 	private void UpdateDesiredPosition()
 	{
 		desired_cube_coordinates = cube_coordinates;
+		desired_forward_cube_coordinates = cube_coordinates;
 		desired_heading = heading;
 		
 		List<Vector3> positions = new List<Vector3>();
-		GetSteerPositions(positions);
+		GetAllSteerPositions(positions);
 		
 		if (positions.Count == 0)
 			return;
 		
-		float cos_half_steering_arc = Mathf.Cos(30.0f * Mathf.Deg2Rad);
 		float cell_size = HexGridManager.instance.cell_size;
 		
 		Vector3 car_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
@@ -124,16 +126,20 @@ public class Car : MonoBehaviour
 			Vector3 direction = (cartesian - car_position).normalized;
 			
 			float dot = Vector3.Dot(direction, car_direction);
-			if (cos_half_steering_arc > dot)
-				continue;
-			
 			if (max_dot < dot)
 			{
 				max_dot = dot;
 				desired_cube_coordinates = position;
+				desired_forward_cube_coordinates = position;
 				desired_heading = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
 			}
 		}
+	}
+	
+	private int GetSteerDistance(Vector3 position)
+	{
+		int steer_distance = (int)HexGrid.GetCubeDistance(desired_forward_cube_coordinates, position);
+		return Mathf.Min(steer_distance, 2);
 	}
 	
 	public void SetDesiredPosition(Vector3 position)
@@ -158,6 +164,21 @@ public class Car : MonoBehaviour
 		return desired_cube_coordinates;
 	}
 	
+	public int GetHealth()
+	{
+		return health;
+	}
+	
+	public int GetAPUsed()
+	{
+		return Mathf.Abs(desired_gear - gear) + GetSteerDistance(desired_cube_coordinates);
+	}
+	
+	public int GetAPLeft()
+	{
+		return max_ap - GetAPUsed();
+	}
+	
 	public void SetCheckpoint(int num)
 	{
 		current_checkpoint = num;
@@ -178,18 +199,50 @@ public class Car : MonoBehaviour
 		return current_lap;
 	}
 	
-	public void GetSteerPositions(List<Vector3> positions)
+	public void GetAvailableSteerPositions(List<Vector3> positions)
+	{
+		List<Vector3> steer_positions = new List<Vector3>();
+		GetAllSteerPositions(steer_positions);
+		
+		positions.Clear();
+		
+		Vector3 temp = desired_cube_coordinates;
+		desired_cube_coordinates = desired_forward_cube_coordinates;
+		
+		int ap_left = GetAPLeft();
+		
+		desired_cube_coordinates = temp;
+		
+		if (ap_left <= 0)
+		{
+			positions.Add(desired_forward_cube_coordinates);
+			return;
+		}
+		
+		foreach(Vector3 position in steer_positions)
+		{
+			int steer_distance = GetSteerDistance(position);
+			
+			if (steer_distance > ap_left)
+				continue;
+			
+			positions.Add(position);
+		}
+	}
+	
+	public void GetAllSteerPositions(List<Vector3> positions)
 	{
 		positions.Clear();
 		
 		if (gears == null)
 			return;
 		
-		int speed = gears[gear].speed;
+		CarGear car_gear = gears[desired_gear];
+		int speed = car_gear.speed;
 		if (speed == 0)
 			return;
 		
-		float cos_half_steering_arc = Mathf.Cos(gears[gear].steering_arc * 0.5f * Mathf.Deg2Rad);
+		float cos_half_steering_arc = Mathf.Cos(car_gear.steering_arc * 0.5f * Mathf.Deg2Rad);
 		float cell_size = HexGridManager.instance.cell_size;
 		
 		Vector3 car_direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(heading * Mathf.Deg2Rad));
@@ -220,12 +273,47 @@ public class Car : MonoBehaviour
 		return gear;
 	}
 	
+	public int GetDesiredGear()
+	{
+		return desired_gear;
+	}
+	
+	public bool CanGearUp()
+	{
+		if (gears == null)
+			return false;
+		
+		if (desired_gear >= gears.Length - 1)
+			return false;
+		
+		desired_gear++;
+		int delta = (max_ap - GetAPUsed());
+		desired_gear--;
+		
+		return delta >= 0;
+	}
+	
+	public bool CanGearDown()
+	{
+		if (gears == null)
+			return false;
+		
+		if (desired_gear <= 0)
+			return false;
+		
+		desired_gear--;
+		int delta = (max_ap - GetAPUsed());
+		desired_gear++;
+		
+		return delta >= 0;
+	}
+	
 	public void GearUp()
 	{
 		if (gears == null)
 			return;
 		
-		gear = Mathf.Min(gear + 1, gears.Length - 1);
+		desired_gear = Mathf.Min(desired_gear + 1, gears.Length - 1);
 		UpdateDesiredPosition();
 	}
 	
@@ -234,7 +322,7 @@ public class Car : MonoBehaviour
 		if (gears == null)
 			return;
 		
-		gear = Mathf.Max(gear - 1, 0);
+		desired_gear = Mathf.Max(desired_gear - 1, 0);
 		UpdateDesiredPosition();
 	}
 }
