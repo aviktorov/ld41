@@ -25,13 +25,16 @@ public class Car : MonoBehaviour
 	
 	private int gear = 0;
 	private int desired_gear = 0;
+	private int turn_gear = 0;
 	
 	private Vector3 cube_coordinates;
 	private Vector3 desired_cube_coordinates;
 	private Vector3 desired_forward_cube_coordinates;
+	private Vector3 turn_cube_coordinates;
 	
 	private float heading;
 	private float desired_heading;
+	private float turn_heading;
 	
 	private void Awake()
 	{
@@ -71,36 +74,50 @@ public class Car : MonoBehaviour
 		// TODO: all tweens here
 	}
 	
-	public void Turn()
+	public void BeginTurn()
 	{
-		int distance = (int)HexGrid.GetCubeDistance(desired_cube_coordinates, cube_coordinates);
-		Vector3 traced_cube_coordinates = cube_coordinates;
-		
-		// trace car path
-		// TODO: move to Game.Turn()
-		if (distance > 0)
-		{
-			for (int i = 0; i <= distance; i++)
-			{
-				float k = (float)i / distance;
-				traced_cube_coordinates = Vector3.Lerp(cube_coordinates, desired_cube_coordinates, k);
-				traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
-				
-				if (Game.instance.IsValidCheckpoint(traced_cube_coordinates, current_checkpoint))
-					Game.instance.NextCheckpoint(this);
-				
-				// TODO: check for obstacles
-			}
-		}
-		
-		cube_coordinates = traced_cube_coordinates;
-		heading = desired_heading;
-		gear = desired_gear;
-		
-		UpdateDesiredPosition();
+		turn_gear = desired_gear;
+		turn_heading = desired_heading;
+		turn_cube_coordinates = Game.instance.TraceCarPath(this);
 	}
 	
-	private void UpdateDesiredPosition()
+	public void EndTurn()
+	{
+		cube_coordinates = turn_cube_coordinates;
+		heading = turn_heading;
+		gear = turn_gear;
+		desired_gear = turn_gear;
+	}
+	
+	public void OnObstacleCollision()
+	{
+		Damage(desired_gear);
+		turn_gear = 0;
+	}
+	
+	public void OnCarCollision(Car car)
+	{
+		// TODO: better damage
+		int damage = (car.GetDesiredGear() + desired_gear) / 2;
+		Damage(damage);
+		
+		// TODO: better gear
+		turn_gear = 0;
+		
+		// TODO: modify heading
+	}
+	
+	public void Damage(int damage)
+	{
+		if (health == 0)
+			return;
+		
+		health = Mathf.Max(health - damage, 0);
+		if (health == 0)
+			Debug.Log("I'm dead!");
+	}
+	
+	public void UpdateDesiredPosition()
 	{
 		desired_cube_coordinates = cube_coordinates;
 		desired_forward_cube_coordinates = cube_coordinates;
@@ -157,6 +174,11 @@ public class Car : MonoBehaviour
 			
 			desired_heading = Mathf.Atan2(new_car_direction.z, new_car_direction.x) * Mathf.Rad2Deg;
 		}
+	}
+	
+	public Vector3 GetCurrentPosition()
+	{
+		return cube_coordinates;
 	}
 	
 	public Vector3 GetDesiredPosition()
@@ -255,7 +277,6 @@ public class Car : MonoBehaviour
 		{
 			for (int i = 0; i < speed; i++)
 			{
-				// TODO: trace & filter collision positions
 				// filter positions by steering angle
 				Vector3 cartesian = HexGrid.CubeToCartesian(ring_cube_coordinates, cell_size);
 				Vector3 direction = (cartesian - car_position).normalized;
@@ -268,9 +289,20 @@ public class Car : MonoBehaviour
 		}
 	}
 	
+	public void SetGear(int g)
+	{
+		gear = g;
+	}
+	
 	public int GetGear()
 	{
 		return gear;
+	}
+	
+	public void SetDesiredGear(int g)
+	{
+		desired_gear = g;
+		Game.instance.UpdateDesiredPositions();
 	}
 	
 	public int GetDesiredGear()
@@ -314,7 +346,7 @@ public class Car : MonoBehaviour
 			return;
 		
 		desired_gear = Mathf.Min(desired_gear + 1, gears.Length - 1);
-		UpdateDesiredPosition();
+		Game.instance.UpdateDesiredPositions();
 	}
 	
 	public void GearDown()
@@ -323,6 +355,6 @@ public class Car : MonoBehaviour
 			return;
 		
 		desired_gear = Mathf.Max(desired_gear - 1, 0);
-		UpdateDesiredPosition();
+		Game.instance.UpdateDesiredPositions();
 	}
 }
