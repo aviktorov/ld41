@@ -728,13 +728,6 @@ MonoBehaviour:
   game_camera: {fileID: 1991178427}
   track: {fileID: 111217258}
   player_team: 0
-  checkpoint_highlight_color: {r: 0, g: 0.30882353, b: 0, a: 0.453}
-  obstacle_highlight_color: {r: 0.07352942, g: 0, b: 0, a: 1}
-  prohibited_steer_highlight_color: {r: 0.017841691, g: 0.09625492, b: 0.16176468,
-    a: 0.9}
-  available_steer_highlight_color: {r: 0.09991349, g: 0.35394648, b: 0.5661765, a: 0.919}
-  desired_highlight_color: {r: 0, g: 0.71034503, b: 1, a: 1}
-  collision_highlight_color: {r: 0.7, g: 0.1, b: 0.1, a: 0.397}
   turn_tween_duration: 1
   ui_in_use: 0
 --- !u!1 &253117488
@@ -952,6 +945,10 @@ Prefab:
         type: 2}
       propertyPath: team
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1622072482686198, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -1311,6 +1308,10 @@ Prefab:
         type: 2}
       propertyPath: team
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1622072482686198, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -2169,7 +2170,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4562036440376240, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 3.415
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 4562036440376240, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
       propertyPath: m_LocalPosition.y
@@ -3261,9 +3262,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d695cfe93764943a1a7bb85ae9a9b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  default_material: {fileID: 2100000, guid: 9f88d24aff2eef14f83a9f8ffc8424d9, type: 2}
+  selection_material: {fileID: 2100000, guid: 89685ac214b9b584eaedbad97c758308, type: 2}
+  steer_material: {fileID: 2100000, guid: 97ad952f305bcfd46a3ce621a09e4fc1, type: 2}
+  actionable_steer_material: {fileID: 2100000, guid: 9997d1472e4c98241809a1c49dce3efc,
+    type: 2}
+  collision_material: {fileID: 2100000, guid: c392a1d3fc078044a86a4f8a2f20ae33, type: 2}
+  damage_area_material: {fileID: 2100000, guid: 21713a8d3a52ce149927718036ece64c,
+    type: 2}
+  obstacle_material: {fileID: 2100000, guid: eeabbc0c995596e44aa26702fd79c15b, type: 2}
+  checkpoint_material: {fileID: 2100000, guid: aa4d7b74bca6e7442b79e8802ffb4ec1, type: 2}
+  move_point_prefab: {fileID: 1488036671396146, guid: e2f37b56f86f43941b036a0b19b0d1fb,
+    type: 2}
+  target_point_prefab: {fileID: 0}
+  hit_damage_prefab: {fileID: 0}
+  collision_damage_prefab: {fileID: 1722522745349548, guid: 48c2fee1fb5e00d408b93aba61598bfb,
+    type: 2}
   cell_prefab: {fileID: 1157758724936940, guid: 0ef8c6cadaa692342b33cb36cc6533b2,
     type: 2}
-  default_material: {fileID: 2100000, guid: 9f88d24aff2eef14f83a9f8ffc8424d9, type: 2}
   cell_size: 0.5
   grid_size: 100
 --- !u!4 &2016271901

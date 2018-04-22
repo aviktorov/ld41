@@ -20,13 +20,6 @@ public class Game : MonoSingleton<Game> {
 	
 	public int player_team = 0;
 	
-	public Color checkpoint_highlight_color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
-	public Color obstacle_highlight_color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-	public Color prohibited_steer_highlight_color = new Color(0.5f, 0.5f, 0.5f, 0.9f);
-	public Color available_steer_highlight_color = new Color(0.8f, 0.8f, 0.8f, 1.0f);
-	public Color desired_highlight_color = new Color(0.5f, 0.5f, 0.0f, 1.0f);
-	public Color collision_highlight_color = new Color(0.7f, 0.1f, 0.1f, 1.0f);
-	
 	public float turn_tween_duration = 1.0f;
 	public bool ui_in_use = false;
 	
@@ -109,23 +102,24 @@ public class Game : MonoSingleton<Game> {
 			Vector3 current_position = selected_car.GetCurrentPosition();
 			Vector3 desired_position = selected_car.GetDesiredPosition();
 			
-			HexGridManager.instance.HighlightCellCube(current_position, Color.white);
+			HexGridManager.instance.HighlightCellCube(current_position, HighlightType.Selection);
 			
 			bool collision = false;
 			foreach (Vector3 position in all_steer_positions)
 			{
 				Vector3 traced_position = TracePath(selected_car, current_position, position, out collision);
 				bool is_available = steer_positions.Contains(position);
-				bool is_desired = position == desired_position;
 				
-				Color color = (is_available) ? available_steer_highlight_color : prohibited_steer_highlight_color;
+				HighlightType type = (is_available) ? HighlightType.ActionableSteer : HighlightType.Steer;
+				
+				bool is_desired = (position == desired_position);
 				if (is_desired)
-					color = desired_highlight_color;
+					HexGridManager.instance.AddCellIconCube(traced_position, IconType.MovePoint);
 				
 				if (collision)
-					color = collision_highlight_color;
+					HexGridManager.instance.AddCellIconCube(traced_position, IconType.CollisionDamage);
 				
-				HexGridManager.instance.HighlightCellCube(traced_position, color);
+				HexGridManager.instance.HighlightCellCube(traced_position, type);
 			}
 		}
 		
@@ -180,14 +174,13 @@ public class Game : MonoSingleton<Game> {
 	
 	private void Update()
 	{
-		/*
 		// visualize track
 		foreach (Vector3 position in checkpoints.Keys)
-			HexGridManager.instance.HighlightCellCube(position, checkpoint_highlight_color);
+			HexGridManager.instance.HighlightCellCube(position, HighlightType.Checkpoint);
 		
 		foreach (Vector3 position in obstacles.Keys)
-			HexGridManager.instance.HighlightCellCube(position, obstacle_highlight_color);
-		/**/
+			HexGridManager.instance.HighlightCellCube(position, HighlightType.Obstacle);
+		
 		// process game logic
 		switch(state)
 		{

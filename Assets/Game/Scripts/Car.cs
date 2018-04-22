@@ -314,12 +314,6 @@ public class Car : MonoBehaviour
 		return gear;
 	}
 	
-	public void SetDesiredGear(int g)
-	{
-		desired_gear = g;
-		Game.instance.UpdateDesiredPositions();
-	}
-	
 	public int GetDesiredGear()
 	{
 		return desired_gear;
