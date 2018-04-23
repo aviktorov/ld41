@@ -20,13 +20,13 @@ public class Car : MonoBehaviour
 	
 	public CarGear[] gears;
 	
-	public float ai_checkpoint_importance = 5.0f;
-	public float ai_obstacle_importance = 10.0f;
+	public float ai_checkpoint_importance = 30000.0f;
+	public float ai_obstacle_importance = 100.0f;
 	public float ai_gear_importance = 10.0f;
-	public float ai_random_mean = 5.0f;
-	public float ai_random_spread = 5.0f;
+	public float ai_random_mean = -50.0f;
+	public float ai_random_spread = 50.0f;
 	public float ai_hit_penalty = -1000.0f;
-	public int ai_gear_threshold = 1;
+	public int ai_gear_threshold = 2;
 	
 	private int current_checkpoint = 0;
 	private int current_lap = 0;
