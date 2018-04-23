@@ -18,13 +18,15 @@ public class Car : MonoBehaviour
 	public int max_health = 5;
 	public int max_ap = 2;
 	
-	public float smoothness = 5.0f;
 	public CarGear[] gears;
 	
 	public float ai_checkpoint_importance = 5.0f;
 	public float ai_obstacle_importance = 10.0f;
+	public float ai_gear_importance = 10.0f;
 	public float ai_random_mean = 5.0f;
 	public float ai_random_spread = 5.0f;
+	public float ai_hit_penalty = -1000.0f;
+	public int ai_gear_threshold = 1;
 	
 	private int current_checkpoint = 0;
 	private int current_lap = 0;
@@ -286,12 +288,6 @@ public class Car : MonoBehaviour
 		best_move = desired_cube_coordinates;
 		GetAvailableSteerPositions(possible_moves);
 		
-		desired_gear = temp;
-		UpdateDesiredPosition();
-		
-		if (possible_moves.Count == 0)
-			return Mathf.NegativeInfinity;
-		
 		float best_weight = Mathf.NegativeInfinity;
 		foreach(Vector3 move in possible_moves)
 		{
@@ -303,6 +299,9 @@ public class Car : MonoBehaviour
 				best_move = move;
 			}
 		}
+		
+		desired_gear = temp;
+		UpdateDesiredPosition();
 		
 		return best_weight;
 	}

@@ -39,7 +39,7 @@ public class Game : MonoSingleton<Game> {
 		state = GameState.Gameplay;
 		
 		foreach(Car car in cars.Values)
-			// if (car.team != player_team)
+			if (car.team != player_team)
 				car.DoAI();
 	}
 	
@@ -84,7 +84,7 @@ public class Game : MonoSingleton<Game> {
 		}
 		
 		// cell selection
-		if(selected_car && Input.GetMouseButtonDown(1) && !ui_in_use)
+		if(selected_car && selected_car.team == player_team && Input.GetMouseButtonDown(1) && !ui_in_use)
 		{
 			Vector3 cell_position = HexGrid.CartesianToCubeRounded(hit.point, size);
 			Vector3 current_position = selected_car.GetCurrentPosition();
@@ -397,7 +397,7 @@ public class Game : MonoSingleton<Game> {
 			
 			// static obstacles
 			if (IsObstacle(traced_cube_coordinates))
-				return Mathf.NegativeInfinity;
+				return car.ai_hit_penalty * car.GetDesiredGear();
 			
 			// TODO: laser walls
 		}
@@ -405,22 +405,25 @@ public class Game : MonoSingleton<Game> {
 		// cars
 		Car other_car = GetIntersectedCar(car, p1);
 		if (other_car)
-			return Mathf.NegativeInfinity;
+			return car.ai_hit_penalty * car.GetDesiredGear();
 		
 		int distance_to_obstacle = GetDistanceToObstacle(car, p1);
 		int distance_to_checkpoint = GetDistanceToCheckpoint(car, p1, current_checkpoint);
 		
-		// the closer car to the obstacle the bigger weight should be
-		float obstacle_weight = car.ai_obstacle_importance / distance_to_obstacle;
-		
-		// the close car to the checkpoint the bigger weight should be
+		float obstacle_weight = car.ai_obstacle_importance * distance_to_obstacle;
+		float potential_damage_weight = car.ai_gear_importance * car.GetDesiredGear() / (distance_to_obstacle + 1);
 		float checkpoint_weight = car.ai_checkpoint_importance / (distance_to_checkpoint + 1);
 		
 		float random_weight = car.ai_random_mean + Random.Range(-car.ai_random_spread, car.ai_random_spread);
 		
-		weight -= obstacle_weight;
 		weight += checkpoint_weight;
 		weight += random_weight;
+		
+		if (car.GetDesiredGear() > car.ai_gear_threshold)
+		{
+			weight += obstacle_weight;
+			weight -= potential_damage_weight;
+		}
 		
 		return weight;
 	}
@@ -634,7 +637,7 @@ public class Game : MonoSingleton<Game> {
 			turret.EndTurn();
 		
 		foreach(Car car in cars.Values)
-			// if (car.team != player_team)
+			if (car.team != player_team)
 				car.DoAI();
 		
 		state = GameState.EndTurn;
