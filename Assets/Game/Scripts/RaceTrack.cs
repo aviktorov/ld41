@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RaceTrack : MonoBehaviour
 {
+	public GameObject checkpoint_prefab = null;
 	public int num_laps = 5;
 	
 	private void Start()
@@ -31,7 +32,16 @@ public class RaceTrack : MonoBehaviour
 				Ray ray = new Ray(new Vector3(x, 100.0f, z), Vector3.down);
 				RaycastHit hit;
 				if (child_collider.Raycast(ray, out hit, Mathf.Infinity))
-					Game.instance.AddCheckpoint(HexGrid.CartesianToCubeRounded(ray.origin, cell_size), id);
+				{
+					Vector3 cube = HexGrid.CartesianToCubeRounded(ray.origin, cell_size);
+					Vector3 corrected_cartesian = HexGrid.CubeToCartesian(cube, cell_size);
+					
+					Game.instance.AddCheckpoint(cube, id);
+					
+					if (checkpoint_prefab)
+						GameObject.Instantiate(checkpoint_prefab, corrected_cartesian, Quaternion.identity);
+
+				}
 			}
 		}
 		

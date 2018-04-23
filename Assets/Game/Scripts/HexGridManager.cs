@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JamSuite;
 
 public enum HighlightType
 {
@@ -64,7 +65,10 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 				axial.y = y;
 				Vector3 cartesian = HexGrid.AxialToCartesian(axial, cell_size);
 				
-				GameObject.Instantiate(cell_prefab, cartesian, Quaternion.identity, transform);
+				Ray ray = new Ray(cartesian.WithY(100.0f), Vector3.down);
+				RaycastHit hit;
+				if (!Physics.Raycast(ray, out hit))
+					GameObject.Instantiate(cell_prefab, cartesian, Quaternion.identity, transform);
 			}
 		}
 	}

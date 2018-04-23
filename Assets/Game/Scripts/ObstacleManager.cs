@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ObstacleManager : MonoBehaviour
 {
+	public GameObject[] obstacle_prefabs = null;
+	
 	private void Start()
 	{
 		for (int i = 0; i < transform.childCount; i++)
@@ -28,7 +30,19 @@ public class ObstacleManager : MonoBehaviour
 				Ray ray = new Ray(new Vector3(x, 100.0f, z), Vector3.down);
 				RaycastHit hit;
 				if (child_collider.Raycast(ray, out hit, Mathf.Infinity))
-					Game.instance.AddObstacle(HexGrid.CartesianToCubeRounded(ray.origin, cell_size));
+				{
+					Vector3 cube = HexGrid.CartesianToCubeRounded(ray.origin, cell_size);
+					Vector3 corrected_cartesian = HexGrid.CubeToCartesian(cube, cell_size);
+					
+					Game.instance.AddObstacle(cube);
+					
+					GameObject prefab = null;
+					if (obstacle_prefabs != null && obstacle_prefabs.Length > 0)
+						prefab = obstacle_prefabs[Random.Range(0, obstacle_prefabs.Length)];
+					
+					if (prefab)
+						GameObject.Instantiate(prefab, corrected_cartesian, Quaternion.identity);
+				}
 			}
 		}
 		

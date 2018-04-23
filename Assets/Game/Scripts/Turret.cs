@@ -5,6 +5,8 @@ using JamSuite;
 
 public class Turret : MonoBehaviour
 {
+	public Transform turret_head = null;
+	
 	public int fire_cooldown = 2;
 	public float turn_angle = 30.0f;
 	public float fire_arc = 90.0f;
@@ -34,7 +36,7 @@ public class Turret : MonoBehaviour
 	{
 		float cell_size = HexGridManager.instance.cell_size;
 		
-		heading = Mathf.Atan2(transform.forward.z, transform.forward.x) * Mathf.Rad2Deg;
+		heading = Mathf.Atan2(turret_head.forward.z, turret_head.forward.x) * Mathf.Rad2Deg;
 		cube_coordinates = HexGrid.CartesianToCubeRounded(transform.position, cell_size);
 		fire_coordinates = cube_coordinates;
 		
@@ -54,7 +56,7 @@ public class Turret : MonoBehaviour
 		Vector3 target_direction = new Vector3(Mathf.Cos(heading * Mathf.Deg2Rad), 0.0f, Mathf.Sin(heading * Mathf.Deg2Rad));
 		Vector3 target_position = HexGrid.CubeToCartesian(cube_coordinates, cell_size);
 		
-		transform.rotation = Quaternion.Lerp(tween_rotation, Quaternion.LookRotation(target_direction), tween_time);
+		turret_head.rotation = Quaternion.Lerp(tween_rotation, Quaternion.LookRotation(target_direction), tween_time);
 		transform.position = Vector3.Lerp(tween_position, target_position, tween_time);
 	}
 	
@@ -125,6 +127,6 @@ public class Turret : MonoBehaviour
 			current_fire_cooldown--;
 		
 		tween_position = transform.position;
-		tween_rotation = transform.rotation;
+		tween_rotation = turret_head.rotation;
 	}
 }

@@ -9299,6 +9299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13f9cfc611b7b84593bfcd34e2e9c57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacle_prefabs:
+  - {fileID: 1906779462215854, guid: c3a0898c0fc7ffc49a9ac194e108e789, type: 2}
+  - {fileID: 1140936482136046, guid: 6dcb2824d214b69469a9582ee86486e6, type: 2}
 --- !u!1001 &2081557127
 Prefab:
   m_ObjectHideFlags: 0
