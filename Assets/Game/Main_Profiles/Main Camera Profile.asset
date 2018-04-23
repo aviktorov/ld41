@@ -42,16 +42,16 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.33
+    value: 0.23
   smoothness:
     overrideState: 1
-    value: 0.11
+    value: 0.44
   roundness:
     overrideState: 0
     value: 1
   rounded:
-    overrideState: 1
-    value: 1
+    overrideState: 0
+    value: 0
   mask:
     overrideState: 0
     value: {fileID: 0}
@@ -73,13 +73,13 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   colored:
     overrideState: 1
     value: 1
   intensity:
     overrideState: 1
-    value: 0.11
+    value: 0.09
   size:
     overrideState: 1
     value: 1.75
@@ -103,7 +103,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 9.3
+    value: 13.9
   threshold:
     overrideState: 1
     value: 1
@@ -150,7 +150,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.17
+    value: 0.19
   fastMode:
     overrideState: 0
     value: 0

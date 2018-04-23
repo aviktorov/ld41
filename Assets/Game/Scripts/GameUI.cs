@@ -24,8 +24,8 @@ public class GameUI : MonoBehaviour
 		switch(Game.instance.GetState())
 		{
 			case GameState.Gameplay: ProcessGameplayUI(); break;
-			case GameState.Win: ProcessEndUI("You win"); break;
-			case GameState.Lose: ProcessEndUI("You lose"); break;
+			case GameState.Win: ProcessEndUI("Victory"); break;
+			case GameState.Lose: ProcessEndUI("Defeat"); break;
 		}
 	}
 	
