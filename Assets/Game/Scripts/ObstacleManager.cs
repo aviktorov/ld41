@@ -31,6 +31,8 @@ public class ObstacleManager : MonoBehaviour
 					Game.instance.AddObstacle(HexGrid.CartesianToCubeRounded(ray.origin, cell_size));
 			}
 		}
+		
+		// child.gameObject.GetComponent<Renderer>().enabled = false;
 	}
 	
 	public int GetNumObstacles()

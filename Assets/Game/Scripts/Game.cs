@@ -14,7 +14,6 @@ public enum GameState
 
 public class Game : MonoSingleton<Game> {
 	
-	public Transform cursor = null;
 	public Camera game_camera = null;
 	public RaceTrack track = null;
 	
@@ -56,14 +55,13 @@ public class Game : MonoSingleton<Game> {
 		// cursor position
 		if (intersected)
 		{
-			Vector3 cube_rounded = HexGrid.CartesianToCubeRounded(hit.point, size);
-			Vector3 cartesian_rounded = HexGrid.CubeToCartesian(cube_rounded, size);
+			Vector3 cursor_cube_coordinates = HexGrid.CartesianToCubeRounded(hit.point, size);
 			
-			cursor.position = cartesian_rounded;
+			HexGridManager.instance.HighlightCellCube(cursor_cube_coordinates, HighlightType.Selection, true);
 			
 			foreach(Car car in cars.Values)
 			{
-				if (car.GetCurrentPosition() != cube_rounded)
+				if (car.GetCurrentPosition() != cursor_cube_coordinates)
 					continue;
 				
 				intersected_car = car;

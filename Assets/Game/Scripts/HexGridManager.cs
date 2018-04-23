@@ -26,7 +26,8 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 {
 	private const int grid_mask = 1 << 8;
 	
-	public Material default_material = null;
+	public Material default_cell_material = null;
+	public Material default_hightlight_material = null;
 	public Material selection_material = null;
 	public Material steer_material = null;
 	public Material actionable_steer_material = null;
@@ -74,7 +75,7 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		ClearHighlights();
 	}
 	
-	public void HighlightCellCube(Vector3 cube, HighlightType type)
+	public void HighlightCellCube(Vector3 cube, HighlightType type, bool cursor = false)
 	{
 		Vector3 cartesian = HexGrid.CubeToCartesian(cube, cell_size);
 		cartesian.y = 100.0f;
@@ -95,19 +96,31 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 		if (!mesh_renderer)
 			return;
 		
+		if (mesh_renderer.sharedMaterials.Length < 2)
+			return;
+		
 		if (!highlighted_cells.ContainsKey(gameObject.GetInstanceID()))
 			highlighted_cells.Add(gameObject.GetInstanceID(), mesh_renderer);
 		
-		switch(type)
+		Material[] shared_materials = mesh_renderer.sharedMaterials;
+		
+		if (cursor)
+			shared_materials[0] = selection_material;
+		else
 		{
-			case HighlightType.Default: mesh_renderer.sharedMaterial = default_material; break;
-			case HighlightType.Selection: mesh_renderer.sharedMaterial = selection_material; break;
-			case HighlightType.Steer: mesh_renderer.sharedMaterial = steer_material; break;
-			case HighlightType.ActionableSteer: mesh_renderer.sharedMaterial = actionable_steer_material; break;
-			case HighlightType.Collision: mesh_renderer.sharedMaterial = collision_material; break;
-			case HighlightType.Obstacle: mesh_renderer.sharedMaterial = obstacle_material; break;
-			case HighlightType.Checkpoint: mesh_renderer.sharedMaterial = checkpoint_material; break;
+			switch(type)
+			{
+				case HighlightType.Default: shared_materials[1] = default_hightlight_material; break;
+				case HighlightType.Selection: shared_materials[1] = selection_material; break;
+				case HighlightType.Steer: shared_materials[1] = steer_material; break;
+				case HighlightType.ActionableSteer: shared_materials[1] = actionable_steer_material; break;
+				case HighlightType.Collision: shared_materials[1] = collision_material; break;
+				case HighlightType.Obstacle: shared_materials[1] = obstacle_material; break;
+				case HighlightType.Checkpoint: shared_materials[1] = checkpoint_material; break;
+			}
 		}
+		
+		mesh_renderer.sharedMaterials = shared_materials;
 	}
 	
 	public void AddCellIconCube(Vector3 cube, IconType type)
@@ -141,7 +154,12 @@ public class HexGridManager : MonoSingleton<HexGridManager>
 	public void ClearHighlights()
 	{
 		foreach (MeshRenderer renderer in highlighted_cells.Values)
-			renderer.sharedMaterial = default_material;
+		{
+			Material[] shared_materials = renderer.sharedMaterials;
+			shared_materials[0] = default_cell_material;
+			shared_materials[1] = default_hightlight_material;
+			renderer.sharedMaterials = shared_materials;
+		}
 		
 		highlighted_cells.Clear();
 	}

@@ -34,6 +34,8 @@ public class RaceTrack : MonoBehaviour
 					Game.instance.AddCheckpoint(HexGrid.CartesianToCubeRounded(ray.origin, cell_size), id);
 			}
 		}
+		
+		child.gameObject.GetComponent<Renderer>().enabled = false;
 	}
 	
 	public int GetNumCheckpoints()
