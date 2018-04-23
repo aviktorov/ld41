@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4330972471073482}
   - component: {fileID: 114661054357185948}
   - component: {fileID: 65675359124770896}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Turret
-  m_TagString: GridCell
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1185486962374604
 GameObject:
@@ -38,12 +38,12 @@ GameObject:
   - component: {fileID: 4973205222486788}
   - component: {fileID: 33657416184528748}
   - component: {fileID: 23018749464595830}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1550462967453874
 GameObject:
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4078671084220844}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: HeadPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4578099755852368}
   - component: {fileID: 33760589456275014}
   - component: {fileID: 23077974089553924}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1003017514571336}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.69, y: 0.41, z: -1.43}
+  m_LocalPosition: {x: 9.67, y: 0.41, z: -17.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4973205222486788}
@@ -147,7 +147,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: e5dae7ab410f4d04d9e3e0f910628566, type: 2}
-  - {fileID: 2100000, guid: c392a1d3fc078044a86a4f8a2f20ae33, type: 2}
+  - {fileID: 2100000, guid: 72bcdaa4b3406fd499b0258625665533, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

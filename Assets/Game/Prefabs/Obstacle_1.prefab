@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4536517864035596}
   - component: {fileID: 33706040313493796}
   - component: {fileID: 23853100806162232}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Visuals
-  m_TagString: GridCell
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1906779462215854
 GameObject:
@@ -42,7 +42,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4536517864035596
 Transform:
@@ -64,7 +64,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1906779462215854}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.7416825, y: -6.8188114, z: -14.671942}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4536517864035596}
@@ -86,7 +86,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: e5dae7ab410f4d04d9e3e0f910628566, type: 2}
-  - {fileID: 2100000, guid: 77019a690b82fef439c1fdcee2b667e7, type: 3}
+  - {fileID: 2100000, guid: 72bcdaa4b3406fd499b0258625665533, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

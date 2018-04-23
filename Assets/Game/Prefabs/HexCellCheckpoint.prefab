@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4016539559418894}
   - component: {fileID: 65763438195816574}
   m_Layer: 8
-  m_Name: HexCellCheckpoint_3 (6)
+  m_Name: HexCellCheckpoint
   m_TagString: GridCell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1674146901731912}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 21.008314, y: 39.0521, z: -31.220331}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4758629936258776}
@@ -87,7 +87,6 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: e5dae7ab410f4d04d9e3e0f910628566, type: 2}
   - {fileID: 2100000, guid: aa4d7b74bca6e7442b79e8802ffb4ec1, type: 2}
-  - {fileID: 2100004, guid: 77019a690b82fef439c1fdcee2b667e7, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +112,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1285825661933710}
-  m_Mesh: {fileID: 4300000, guid: 77019a690b82fef439c1fdcee2b667e7, type: 3}
+  m_Mesh: {fileID: 4300002, guid: d9727b97e640ce54798769ba2e8a400c, type: 3}
 --- !u!65 &65763438195816574
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -124,5 +123,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.017320508, y: 0.019999996, z: 0.00069087103}
-  m_Center: {x: 0, y: 2.4544678e-18, z: -0.00034543558}
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
