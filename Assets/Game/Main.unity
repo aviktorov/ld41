@@ -1207,12 +1207,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -1391,12 +1401,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -1941,12 +1961,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -2036,12 +2066,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -2131,12 +2171,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -2514,12 +2564,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -2762,12 +2822,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -3109,12 +3179,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -3897,12 +3977,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -4156,12 +4246,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -4302,12 +4402,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -5772,12 +5882,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -5867,12 +5987,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -6598,12 +6728,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -7149,12 +7289,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
@@ -7346,12 +7496,22 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: max_health
-      value: 5000
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: ai_random_spread
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_importance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
+        type: 2}
+      propertyPath: ai_gear_threshold
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
