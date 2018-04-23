@@ -143,6 +143,8 @@ public class Car : MonoBehaviour
 			return;
 		
 		health = Mathf.Max(health - damage, 0);
+		if (health == 0)
+			Destroy(gameObject);
 	}
 	
 	public void UpdateDesiredPosition()

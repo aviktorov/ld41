@@ -1,78 +1,74 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour
 {
-	private const int width = 300;
-	private const int height = 200;
-	private void OnGUI()
+	public GameObject game_ui = null;
+	public GameObject end_ui = null;
+	
+	public Text[] end_texts = null;
+	public RectTransform hp_rect = null;
+	public Button gear_up_button = null;
+	public Button gear_down_button = null;
+	private float start_hp_width = 0.0f;
+	
+	private void Start()
 	{
-		switch (Game.instance.GetState())
+		start_hp_width = hp_rect.rect.width;
+	}
+	
+	private void Update()
+	{
+		switch(Game.instance.GetState())
 		{
-			case GameState.Gameplay: OnGameplayGUI(); break;
-			case GameState.Win: OnEndGUI("You win!"); break;
-			case GameState.Lose: OnEndGUI("You lose!"); break;
+			case GameState.Gameplay: ProcessGameplayUI(); break;
+			case GameState.Win: ProcessEndUI("You win"); break;
+			case GameState.Lose: ProcessEndUI("You lose"); break;
 		}
 	}
 	
-	private void OnEndGUI(string text)
+	private void ProcessEndUI(string end_text)
 	{
-		Rect ui_area = new Rect((Screen.width - width) / 2, (Screen.height - height) / 2, width, height);
+		game_ui.SetActive(false);
+		end_ui.SetActive(true);
 		
-		GUILayout.BeginArea(ui_area);
-		GUILayout.Label(text);
-		if (GUILayout.Button("Restart"))
-			Game.instance.Restart();
-		
-		GUILayout.EndArea();
+		foreach(Text text in end_texts)
+			text.text = end_text;
 	}
 	
-	private void OnGameplayGUI()
+	private void ProcessGameplayUI()
 	{
-		Rect ui_area = new Rect((Screen.width - width) / 2, 0, width, height);
+		game_ui.SetActive(true);
+		end_ui.SetActive(false);
 		
-		GUILayout.BeginArea(ui_area);
-		GUILayout.BeginHorizontal("box");
-		foreach(Car car in Game.instance.GetCars())
-		{
-			if (car.team != Game.instance.player_team)
-				continue;
-			
-			GUILayout.BeginVertical("box");
-			
-			GUILayout.Label(string.Format("Gear: {0}", car.GetGear()));
-			GUILayout.Label(string.Format("Lap: {0}", car.GetLap()));
-			GUILayout.FlexibleSpace();
-			GUILayout.Label(string.Format("Health: {0} / {1}", car.GetHealth(), car.max_health));
-			GUILayout.Label(string.Format("AP: {0} / {1}", car.GetAPLeft(), car.max_ap));
-			
-			GUILayout.EndVertical();
-		}
-		GUILayout.EndHorizontal();
+		Car player_car = Game.instance.GetPlayerCar();
+		float new_width = Mathf.Clamp01((float)player_car.GetHealth() / player_car.max_health) * start_hp_width;
+		hp_rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, new_width);
 		
-		Car selected_car = Game.instance.GetSelectedCar();
-		if (selected_car != null)
-		{
-			GUI.enabled = selected_car.CanGearUp();
-			if (GUILayout.Button("Gear up"))
-				selected_car.GearUp();
-			
-			GUI.enabled = selected_car.CanGearDown();
-			if (GUILayout.Button("Gear down"))
-				selected_car.GearDown();
-			
-			GUI.enabled = true;
-		}
+		gear_up_button.interactable = player_car.CanGearUp();
+		gear_down_button.interactable = player_car.CanGearDown();
 		
-		GUILayout.FlexibleSpace();
+		// TODO: update buttons
+		// TODO: show promts & stuff
+	}
+	
+	public void TryGearUp()
+	{
+		Car player_car = Game.instance.GetPlayerCar();
+		if (!player_car.CanGearUp())
+			return;
 		
-		if (GUILayout.Button("End Turn"))
-			Game.instance.Turn();
+		player_car.GearUp();
+	}
+	
+	public void TryGearDown()
+	{
+		Car player_car = Game.instance.GetPlayerCar();
+		if (!player_car.CanGearDown())
+			return;
 		
-		GUILayout.EndArea();
-		
-		if (Event.current.type == EventType.Repaint)
-			Game.instance.ui_in_use = ui_area.Contains(Event.current.mousePosition);
+		player_car.GearDown();
 	}
 }

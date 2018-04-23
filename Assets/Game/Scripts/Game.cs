@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public enum GameState
@@ -24,9 +25,8 @@ public class Game : MonoSingleton<Game> {
 	public GameObject fx_turret_flash_prefab = null;
 	
 	public float turn_tween_duration = 1.0f;
-	public bool ui_in_use = false;
 	
-	private Car selected_car = null;
+	private Car player_car = null;
 	private float current_turn_tween_time = 0.0f;
 	
 	private Dictionary<int, Car> cars = new Dictionary<int, Car>();
@@ -50,6 +50,16 @@ public class Game : MonoSingleton<Game> {
 		foreach(Car car in cars.Values)
 			if (car.team != player_team)
 				car.DoAI();
+		
+		// find player car
+		foreach(Car car in cars.Values)
+		{
+			if(car.team == player_team)
+			{
+				player_car = car;
+				break;
+			}
+		}
 	}
 	
 	private void ProcessGameplay()
@@ -60,67 +70,51 @@ public class Game : MonoSingleton<Game> {
 		bool intersected = Physics.Raycast(ray, out hit);
 		float size = HexGridManager.instance.cell_size;
 		
-		Car intersected_car = null;
+		bool ui_in_use = EventSystem.current.IsPointerOverGameObject();
 		
 		// cursor position
 		if (intersected)
 		{
 			Vector3 cursor_cube_coordinates = HexGrid.CartesianToCubeRounded(hit.point, size);
 			
-			HexGridManager.instance.HighlightCellCube(cursor_cube_coordinates, HighlightType.Selection, true);
-			
-			foreach(Car car in cars.Values)
-			{
-				if (car.GetCurrentPosition() != cursor_cube_coordinates)
-					continue;
-				
-				intersected_car = car;
-				break;
-			}
+			if (!ui_in_use)
+				HexGridManager.instance.HighlightCellCube(cursor_cube_coordinates, HighlightType.Selection, true);
 		}
 		
-		// car selection
-		if(Input.GetMouseButtonDown(0) && !ui_in_use)
-			selected_car = intersected_car;
-		
+		// move selection
 		List<Vector3> steer_positions = new List<Vector3>();
 		List<Vector3> all_steer_positions = new List<Vector3>();
-		if (selected_car)
-		{
-			selected_car.GetAvailableSteerPositions(steer_positions);
-			selected_car.GetAllSteerPositions(all_steer_positions);
-		}
+		player_car.GetAvailableSteerPositions(steer_positions);
+		player_car.GetAllSteerPositions(all_steer_positions);
 		
-		// cell selection
-		if(selected_car && selected_car.team == player_team && Input.GetMouseButtonDown(1) && !ui_in_use)
+		if(Input.GetMouseButtonDown(0) && !ui_in_use)
 		{
 			Vector3 cell_position = HexGrid.CartesianToCubeRounded(hit.point, size);
-			Vector3 current_position = selected_car.GetCurrentPosition();
+			Vector3 current_position = player_car.GetCurrentPosition();
 			
 			bool collision = false;
 			foreach (Vector3 position in steer_positions)
 			{
-				Vector3 traced_position = TracePath(selected_car, current_position, position, out collision);
+				Vector3 traced_position = TracePath(player_car, current_position, position, out collision);
 				if (traced_position != cell_position)
 					continue;
 				
-				selected_car.SetDesiredPosition(position);
+				player_car.SetDesiredPosition(position);
 				break;
 			}
 		}
 		
-		// selected car
-		if (selected_car != null)
+		// player car
 		{
-			Vector3 current_position = selected_car.GetCurrentPosition();
-			Vector3 desired_position = selected_car.GetDesiredPosition();
+			Vector3 current_position = player_car.GetCurrentPosition();
+			Vector3 desired_position = player_car.GetDesiredPosition();
 			
 			HexGridManager.instance.HighlightCellCube(current_position, HighlightType.Selection);
 			
 			bool collision = false;
 			foreach (Vector3 position in all_steer_positions)
 			{
-				Vector3 traced_position = TracePath(selected_car, current_position, position, out collision);
+				Vector3 traced_position = TracePath(player_car, current_position, position, out collision);
 				bool is_available = steer_positions.Contains(position);
 				
 				HighlightType type = (is_available) ? HighlightType.ActionableSteer : HighlightType.Steer;
@@ -136,6 +130,7 @@ public class Game : MonoSingleton<Game> {
 			}
 		}
 		
+		// turrets
 		foreach(Turret turret in turrets.Values)
 		{
 			if (!turret.IsReadyToFire())
@@ -722,13 +717,8 @@ public class Game : MonoSingleton<Game> {
 		current_turn_tween_time = 0.0f;
 	}
 	
-	public Car GetSelectedCar()
+	public Car GetPlayerCar()
 	{
-		return selected_car;
-	}
-	
-	public void SelectCar(Car car)
-	{
-		selected_car = car;
+		return player_car;
 	}
 }
