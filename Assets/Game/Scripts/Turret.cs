@@ -6,6 +6,7 @@ using JamSuite;
 public class Turret : MonoBehaviour
 {
 	public Transform turret_head = null;
+	public Transform fire_socket = null;
 	
 	public int fire_cooldown = 2;
 	public float turn_angle = 30.0f;

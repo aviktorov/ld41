@@ -19,6 +19,10 @@ public class Game : MonoSingleton<Game> {
 	
 	public int player_team = 0;
 	
+	public GameObject fx_hit_prefab = null;
+	public GameObject fx_turret_projectile_prefab = null;
+	public GameObject fx_turret_flash_prefab = null;
+	
 	public float turn_tween_duration = 1.0f;
 	public bool ui_in_use = false;
 	
@@ -29,6 +33,12 @@ public class Game : MonoSingleton<Game> {
 	private Dictionary<int, Turret> turrets = new Dictionary<int, Turret>();
 	private Dictionary<Vector3, int> checkpoints = new Dictionary<Vector3, int>();
 	private Dictionary<Vector3, int> obstacles = new Dictionary<Vector3, int>();
+	
+	private List<Vector3> fx_hit_coords = new List<Vector3>();
+	private List<Turret> fx_turrets = new List<Turret>();
+	private List<GameObject> fx_turret_projectiles = new List<GameObject>();
+	private List<Vector3> fx_turret_projectiles_starts = new List<Vector3>();
+	private List<Vector3> fx_turret_projectiles_targets = new List<Vector3>();
 	
 	private GameState state = GameState.Intro;
 	
@@ -172,8 +182,24 @@ public class Game : MonoSingleton<Game> {
 	private void ProcessEndTurn()
 	{
 		current_turn_tween_time += Time.deltaTime;
+		float projectile_duration = 0.05f;
+		float turret_fx_offset = 0.2f;
+		
+		if (current_turn_tween_time > turn_tween_duration - turret_fx_offset)
+		{
+			SpawnTurretFx();
+			
+			float projectiles_t = current_turn_tween_time - turn_tween_duration + turret_fx_offset;
+			projectiles_t = Mathf.Clamp01(projectiles_t / projectile_duration);
+			TweenTurretProjectilesFx(projectiles_t);
+		}
+		
 		if (current_turn_tween_time > turn_tween_duration)
+		{
+			ClearTurretProjectilesFx();
+			SpawnHitFx();
 			state = GameState.Gameplay;
+		}
 	}
 	
 	private void ProcessWin()
@@ -255,7 +281,7 @@ public class Game : MonoSingleton<Game> {
 			if (IsObstacle(traced_cube_coordinates))
 			{
 				traced_cube_coordinates = prev_traced_cube_coordinates;
-				OnObstacleCollision(car);
+				OnObstacleCollision(traced_cube_coordinates, car);
 				break;
 			}
 			
@@ -267,7 +293,7 @@ public class Game : MonoSingleton<Game> {
 		if (other_car)
 		{
 			traced_cube_coordinates = prev_traced_cube_coordinates;
-			OnCarCollision(car, other_car);
+			OnCarCollision(traced_cube_coordinates, car, other_car);
 		}
 		
 		return traced_cube_coordinates;
@@ -533,15 +559,16 @@ public class Game : MonoSingleton<Game> {
 			car.SetLap(next_lap);
 	}
 	
-	public void OnObstacleCollision(Car car)
+	public void OnObstacleCollision(Vector3 coords, Car car)
 	{
 		car.OnObstacleCollision();
+		fx_hit_coords.Add(coords);
 	}
 	
-	public void OnCarCollision(Car car, Car other_car)
+	public void OnCarCollision(Vector3 coords, Car car, Car other_car)
 	{
 		car.OnCarCollision(other_car);
-		other_car.OnCarCollision(car);
+		fx_hit_coords.Add(coords);
 	}
 	
 	public void OnCarHit(Car car, Turret turret)
@@ -551,6 +578,9 @@ public class Game : MonoSingleton<Game> {
 	
 	public void OnTurretFire(Turret turret)
 	{
+		fx_hit_coords.Add(turret.GetFirePosition());
+		fx_turrets.Add(turret);
+		
 		foreach(Car car in cars.Values)
 			if (car.GetCurrentPosition() == turret.GetFirePosition())
 				OnCarHit(car, turret);
@@ -618,6 +648,53 @@ public class Game : MonoSingleton<Game> {
 	public void UnregisterTurret(Turret turret)
 	{
 		turrets.Remove(turret.gameObject.GetInstanceID());
+	}
+	
+	private void SpawnHitFx()
+	{
+		foreach (Vector3 coords in fx_hit_coords)
+		{
+			Vector3 cartesian = HexGrid.CubeToCartesian(coords, HexGridManager.instance.cell_size);
+			
+			if (fx_hit_prefab != null)
+				GameObject.Instantiate(fx_hit_prefab, cartesian, Quaternion.identity);
+		}
+		fx_hit_coords.Clear();
+	}
+	
+	private void SpawnTurretFx()
+	{
+		foreach (Turret turret in fx_turrets)
+		{
+			Transform fire_socket = turret.fire_socket;
+			
+			if (fx_turret_flash_prefab != null)
+				GameObject.Instantiate(fx_turret_flash_prefab, fire_socket.position, Quaternion.identity);
+			
+			if (fx_turret_projectile_prefab != null)
+			{
+				GameObject projectile = GameObject.Instantiate(fx_turret_projectile_prefab, fire_socket.position, Quaternion.identity) as GameObject;
+				
+				fx_turret_projectiles.Add(projectile);
+				fx_turret_projectiles_starts.Add(fire_socket.position);
+				fx_turret_projectiles_targets.Add(HexGrid.CubeToCartesian(turret.GetFirePosition(), HexGridManager.instance.cell_size));
+			}
+		}
+		
+		fx_turrets.Clear();
+	}
+	
+	private void TweenTurretProjectilesFx(float t)
+	{
+		for(int i = 0; i < fx_turret_projectiles.Count; i++)
+			fx_turret_projectiles[i].transform.position = Vector3.Lerp(fx_turret_projectiles_starts[i], fx_turret_projectiles_targets[i], t);
+	}
+	
+	private void ClearTurretProjectilesFx()
+	{
+		fx_turret_projectiles.Clear();
+		fx_turret_projectiles_targets.Clear();
+		fx_turret_projectiles_starts.Clear();
 	}
 	
 	public void Turn()
