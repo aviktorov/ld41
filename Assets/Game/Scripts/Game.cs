@@ -368,12 +368,14 @@ public class Game : MonoSingleton<Game> {
 		collision = false;
 		int distance = (int)HexGrid.GetCubeDistance(p0, p1);
 		Vector3 traced_cube_coordinates = p0;
+		Vector3 prev_traced_cube_coordinates = p0;
 		
 		if (distance == 0)
 			return traced_cube_coordinates;
 		
 		for (int i = 0; i <= distance; i++)
 		{
+			prev_traced_cube_coordinates = traced_cube_coordinates;
 			float k = Mathf.Clamp01((float)i / distance);
 			traced_cube_coordinates = Vector3.Lerp(p0, p1, k);
 			traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
@@ -381,6 +383,7 @@ public class Game : MonoSingleton<Game> {
 			// static obstacles
 			if (IsObstacle(traced_cube_coordinates))
 			{
+				traced_cube_coordinates = prev_traced_cube_coordinates;
 				collision = true;
 				break;
 			}

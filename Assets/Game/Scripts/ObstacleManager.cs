@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using JamSuite;
 
 public class ObstacleManager : MonoBehaviour
 {
@@ -41,7 +42,10 @@ public class ObstacleManager : MonoBehaviour
 						prefab = obstacle_prefabs[Random.Range(0, obstacle_prefabs.Length)];
 					
 					if (prefab)
-						GameObject.Instantiate(prefab, corrected_cartesian, Quaternion.identity);
+					{
+						GameObject obstacle = GameObject.Instantiate(prefab, corrected_cartesian, Quaternion.identity) as GameObject;
+						obstacle.transform.localScale = obstacle.transform.localScale.WithY(Random.Range(1.0f, 1.2f));
+					}
 				}
 			}
 		}
