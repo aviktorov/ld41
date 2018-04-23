@@ -1318,8 +1318,8 @@ Transform:
   - {fileID: 1690670647}
   - {fileID: 520883234}
   - {fileID: 1702707422}
-  - {fileID: 177762396}
   - {fileID: 1034474318}
+  - {fileID: 177762396}
   - {fileID: 1121389465}
   - {fileID: 1104534527}
   - {fileID: 1319056145}
@@ -1757,6 +1757,10 @@ Prefab:
     - target: {fileID: 114093280798861726, guid: 3ced2961eaa8b1f49a14700a657f7b43,
         type: 2}
       propertyPath: team
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1622072482686198, guid: 3ced2961eaa8b1f49a14700a657f7b43, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

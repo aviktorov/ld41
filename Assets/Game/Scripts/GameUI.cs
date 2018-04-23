@@ -36,6 +36,9 @@ public class GameUI : MonoBehaviour
 		GUILayout.BeginHorizontal("box");
 		foreach(Car car in Game.instance.GetCars())
 		{
+			if (car.team != Game.instance.player_team)
+				continue;
+			
 			GUILayout.BeginVertical("box");
 			
 			GUILayout.Label(string.Format("Gear: {0}", car.GetGear()));

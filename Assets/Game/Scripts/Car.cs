@@ -21,6 +21,11 @@ public class Car : MonoBehaviour
 	public float smoothness = 5.0f;
 	public CarGear[] gears;
 	
+	public float ai_checkpoint_importance = 5.0f;
+	public float ai_obstacle_importance = 10.0f;
+	public float ai_random_mean = 5.0f;
+	public float ai_random_spread = 5.0f;
+	
 	private int current_checkpoint = 0;
 	private int current_lap = 0;
 	
@@ -242,12 +247,70 @@ public class Car : MonoBehaviour
 		return current_lap;
 	}
 	
+	public void DoAI()
+	{
+		int[] gear_offsets = new int[5] {-2, -1, 0, 1, 2};
+		
+		int best_desired_gear = desired_gear;
+		Vector3 best_desired_position = desired_cube_coordinates;
+		float best_weight = Mathf.NegativeInfinity;
+
+		foreach(int gear_offset in gear_offsets)
+		{
+			if ((gear + gear_offset) >= gears.Length || (gear + gear_offset) < 0)
+				continue;
+			
+			Vector3 move_position = Vector3.zero;
+			float move_weight = EstimateGearMove(gear_offset, out move_position);
+			if (best_weight < move_weight)
+			{
+				best_weight = move_weight;
+				best_desired_position = move_position;
+				best_desired_gear = gear + gear_offset;
+			}
+		}
+		
+		SetDesiredGear(best_desired_gear);
+		UpdateDesiredPosition();
+		SetDesiredPosition(best_desired_position);
+	}
+	
+	private float EstimateGearMove(int gear_offset, out Vector3 best_move)
+	{
+		
+		List<Vector3> possible_moves = new List<Vector3>();
+		int temp = desired_gear;
+		
+		desired_gear = gear + gear_offset;
+		UpdateDesiredPosition();
+		best_move = desired_cube_coordinates;
+		GetAvailableSteerPositions(possible_moves);
+		
+		desired_gear = temp;
+		UpdateDesiredPosition();
+		
+		if (possible_moves.Count == 0)
+			return Mathf.NegativeInfinity;
+		
+		float best_weight = Mathf.NegativeInfinity;
+		foreach(Vector3 move in possible_moves)
+		{
+			float weight = Game.instance.EstimateAIPath(this, cube_coordinates, move);
+			
+			if (best_weight < weight)
+			{
+				best_weight = weight;
+				best_move = move;
+			}
+		}
+		
+		return best_weight;
+	}
+	
 	public void GetAvailableSteerPositions(List<Vector3> positions)
 	{
 		List<Vector3> steer_positions = new List<Vector3>();
 		GetAllSteerPositions(steer_positions);
-		
-		positions.Clear();
 		
 		Vector3 temp = desired_cube_coordinates;
 		desired_cube_coordinates = desired_forward_cube_coordinates;
@@ -275,8 +338,6 @@ public class Car : MonoBehaviour
 	
 	public void GetAllSteerPositions(List<Vector3> positions)
 	{
-		positions.Clear();
-		
 		if (gears == null)
 			return;
 		
@@ -318,6 +379,11 @@ public class Car : MonoBehaviour
 	public int GetGear()
 	{
 		return gear;
+	}
+	
+	public void SetDesiredGear(int g)
+	{
+		desired_gear = g;
 	}
 	
 	public int GetDesiredGear()

@@ -37,6 +37,10 @@ public class Game : MonoSingleton<Game> {
 	{
 		// TODO: intro
 		state = GameState.Gameplay;
+		
+		foreach(Car car in cars.Values)
+			// if (car.team != player_team)
+				car.DoAI();
 	}
 	
 	private void ProcessGameplay()
@@ -368,6 +372,136 @@ public class Game : MonoSingleton<Game> {
 		return traced_cube_coordinates;
 	}
 	
+	public float EstimateAIPath(Car car, Vector3 p0, Vector3 p1)
+	{
+		int current_checkpoint = car.GetCheckpoint();
+		int distance = (int)HexGrid.GetCubeDistance(p0, p1);
+		Vector3 traced_cube_coordinates = p0;
+		
+		if (distance == 0)
+			return Mathf.NegativeInfinity;
+		
+		float weight = 0.0f;
+		for (int i = 0; i <= distance; i++)
+		{
+			float k = Mathf.Clamp01((float)i / distance);
+			traced_cube_coordinates = Vector3.Lerp(p0, p1, k);
+			traced_cube_coordinates = HexGrid.GetCubeRounded(traced_cube_coordinates);
+			
+			// checkpoints
+			if (IsValidCheckpoint(traced_cube_coordinates, current_checkpoint))
+			{
+				weight += car.ai_checkpoint_importance;
+				current_checkpoint++;
+			}
+			
+			// static obstacles
+			if (IsObstacle(traced_cube_coordinates))
+				return Mathf.NegativeInfinity;
+			
+			// TODO: laser walls
+		}
+		
+		// cars
+		Car other_car = GetIntersectedCar(car, p1);
+		if (other_car)
+			return Mathf.NegativeInfinity;
+		
+		int distance_to_obstacle = GetDistanceToObstacle(car, p1);
+		int distance_to_checkpoint = GetDistanceToCheckpoint(car, p1, current_checkpoint);
+		
+		// the closer car to the obstacle the bigger weight should be
+		float obstacle_weight = car.ai_obstacle_importance / distance_to_obstacle;
+		
+		// the close car to the checkpoint the bigger weight should be
+		float checkpoint_weight = car.ai_checkpoint_importance / (distance_to_checkpoint + 1);
+		
+		float random_weight = car.ai_random_mean + Random.Range(-car.ai_random_spread, car.ai_random_spread);
+		
+		weight -= obstacle_weight;
+		weight += checkpoint_weight;
+		weight += random_weight;
+		
+		return weight;
+	}
+	
+	public int GetDistanceToCheckpoint(Car car, Vector3 cube_coordinates, int target_checkpoint)
+	{
+		Dictionary<Vector3, Vector3> visited = new Dictionary<Vector3, Vector3>();
+		Queue<Vector3> position_queue = new Queue<Vector3>();
+		Queue<int> distance_queue = new Queue<int>();
+		
+		position_queue.Enqueue(cube_coordinates);
+		distance_queue.Enqueue(0);
+		visited.Add(cube_coordinates, cube_coordinates);
+		
+		while (position_queue.Count != 0)
+		{
+			Vector3 current_coordinates = position_queue.Dequeue();
+			int current_distance = distance_queue.Dequeue();
+			
+			if (IsValidCheckpoint(current_coordinates, target_checkpoint))
+				return current_distance;
+			
+			for (int side = 0; side < 6; side++)
+			{
+				Vector3 neighbor = HexGrid.GetNeighborCube(current_coordinates, side);
+				if (visited.ContainsKey(neighbor))
+					continue;
+				
+				if (IsObstacle(neighbor))
+					continue;
+				
+				Car other_car = GetIntersectedCar(car, neighbor);
+				if (other_car != null)
+					continue;
+				
+				position_queue.Enqueue(neighbor);
+				distance_queue.Enqueue(current_distance + 1);
+				visited.Add(neighbor, neighbor);
+			}
+		}
+		
+		return System.Int32.MaxValue;
+	}
+	
+	public int GetDistanceToObstacle(Car car, Vector3 cube_coordinates)
+	{
+		Dictionary<Vector3, Vector3> visited = new Dictionary<Vector3, Vector3>();
+		Queue<Vector3> position_queue = new Queue<Vector3>();
+		Queue<int> distance_queue = new Queue<int>();
+		
+		position_queue.Enqueue(cube_coordinates);
+		distance_queue.Enqueue(0);
+		visited.Add(cube_coordinates, cube_coordinates);
+		
+		while (position_queue.Count != 0)
+		{
+			Vector3 current_coordinates = position_queue.Dequeue();
+			int current_distance = distance_queue.Dequeue();
+			
+			if (IsObstacle(current_coordinates))
+				return current_distance;
+			
+			Car other_car = GetIntersectedCar(car, current_coordinates);
+			if (other_car != null)
+				return current_distance;
+			
+			for (int side = 0; side < 6; side++)
+			{
+				Vector3 neighbor = HexGrid.GetNeighborCube(current_coordinates, side);
+				if (visited.ContainsKey(neighbor))
+					continue;
+				
+				position_queue.Enqueue(neighbor);
+				distance_queue.Enqueue(current_distance + 1);
+				visited.Add(neighbor, neighbor);
+			}
+		}
+		
+		return System.Int32.MaxValue;
+	}
+	
 	public Car PredictClosestTarget(Vector3 cube_coordinates, int radius)
 	{
 		Car target = null;
@@ -495,9 +629,13 @@ public class Game : MonoSingleton<Game> {
 		
 		foreach(Turret turret in turrets.Values)
 			turret.BeginTurn();
-
+		
 		foreach(Turret turret in turrets.Values)
 			turret.EndTurn();
+		
+		foreach(Car car in cars.Values)
+			// if (car.team != player_team)
+				car.DoAI();
 		
 		state = GameState.EndTurn;
 		current_turn_tween_time = 0.0f;
