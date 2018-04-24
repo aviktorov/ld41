@@ -9,6 +9,7 @@ public class GameUI : MonoBehaviour
 	public GameObject end_ui = null;
 	
 	public Text[] end_texts = null;
+	public Text laps_text = null;
 	public RectTransform hp_rect = null;
 	public Button gear_up_button = null;
 	public Button gear_down_button = null;
@@ -50,8 +51,7 @@ public class GameUI : MonoBehaviour
 		gear_up_button.interactable = player_car.CanGearUp();
 		gear_down_button.interactable = player_car.CanGearDown();
 		
-		// TODO: update buttons
-		// TODO: show promts & stuff
+		laps_text.text = player_car.GetLap().ToString();
 	}
 	
 	public void TryGearUp()
